@@ -709,3 +709,63 @@ html, body, .sapMPageEnableScrolling, .sapMDialogScroll, .sapMSltPicker * {
 	text-align: center;
 	font-weight: 700;
 }
+
+/* ---------- Phone stats: coloured tiles with a mini chart under the number ---------- */
+@media (max-width: 599px) {
+	.statSheet.sapMFlexBox {
+		gap: 1px;
+		background: #edf1f5;
+	}
+	.stat {
+		flex-wrap: wrap !important;
+		row-gap: 8px;
+		border: none !important;
+		background: linear-gradient(140deg, var(--tint) 0%, #ffffff 90%);
+	}
+	.statClickable:hover {
+		background: linear-gradient(140deg, var(--tint) 0%, #ffffff 90%);
+	}
+	/* Active filter: stronger colour */
+	.statActive,
+	.statActive:hover {
+		background: linear-gradient(140deg, color-mix(in srgb, var(--c) 16%, #fff) 0%, var(--tint) 100%);
+	}
+	.statIcon.sapUiIcon,
+	.statActive .statIcon.sapUiIcon {
+		background: #fff;
+		box-shadow: 0 2px 6px color-mix(in srgb, var(--c) 22%, transparent);
+	}
+	.statLabel.sapMText {
+		color: var(--c);
+	}
+
+	/* The chart (last item) drops to its own full-width line */
+	.stat > .sapMFlexItem:last-child {
+		flex: 1 1 100% !important;
+	}
+
+	/* Donut ring becomes a slim percentage bar */
+	.ring {
+		display: block;
+		width: 100%;
+		height: 5px;
+		border-radius: 3px;
+		background: linear-gradient(to right, var(--c) calc(var(--p) * 1%), color-mix(in srgb, var(--c) 15%, #fff) 0);
+	}
+	.ring::before,
+	.ring span {
+		display: none;
+	}
+
+	/* Mini bar chart: small columns per category */
+	.miniBars {
+		display: flex;
+		height: 18px;
+		gap: 5px;
+	}
+	.miniBars i {
+		flex: 1;
+		width: auto;
+		max-width: 22px;
+	}
+}
