@@ -1099,3 +1099,14 @@ body.isScrolled::before {
 	font-size: 0.6875rem;
 	font-weight: 700;
 }
+/*
+	"Ask AI" has no letters that go below the line (like g or y), so text centred
+	by its box looks a little high. Move the text and icon down slightly so it
+	looks centred to the eye.
+*/
+.aiFab .sapMBtnInner .sapMBtnContent {
+	transform: translateY(1.5px);
+}
+.aiFab .sapMBtnInner .sapMBtnIcon {
+	transform: translateY(0.5px);
+}

@@ -50,9 +50,13 @@ sap.ui.define([
 
 		// ---------- Open / close ----------
 
-		/** Opens the chat. sQuestion (optional) is asked straight away. */
+		/**
+		 * Opens the chat. sQuestion (optional) is asked straight away.
+		 * Without a key it opens straight into demo mode, unless the user chose
+		 * "connect Claude" (the plug icon), which shows the key screen.
+		 */
 		open: function (sQuestion) {
-			this._setMode(this._view().getProperty("/ai/demo"));
+			this._setMode(!this._bShowKeyScreen);
 
 			if (!this._pDialog) {
 				this._pDialog = Fragment.load({
@@ -98,18 +102,21 @@ sap.ui.define([
 
 		onForgetKey: function () {
 			ai.clearKey();
+			this._bShowKeyScreen = true;
 			this._view().setProperty("/ai/messages", []);
 			this._setMode(false);
 			MessageToast.show(this._getText("aiKeyRemoved"));
 		},
 
 		onTryDemo: function () {
+			this._bShowKeyScreen = false;
 			this._view().setProperty("/ai/messages", []);
 			this._setMode(true);
 		},
 
 		// Leave demo mode and show the key screen again
 		onExitDemo: function () {
+			this._bShowKeyScreen = true;
 			this._view().setProperty("/ai/messages", []);
 			this._setMode(false);
 		},
