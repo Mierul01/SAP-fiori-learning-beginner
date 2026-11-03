@@ -1132,3 +1132,23 @@ body.isScrolled::before {
 	/* The header space (padding-top) counts inside the 100% height */
 	box-sizing: border-box !important;
 }
+
+/* ---------- iPhone home-screen app: place fixed items against the real screen height ---------- */
+/*
+	There, "bottom: 0" of a fixed element stops short of the real bottom by the
+	status bar height, so the Ask AI button floated too high. --app-h (set in
+	index.html) is the real screen height, so measure from the top instead.
+*/
+.isStandalone .aiFab.sapMBtn {
+	bottom: auto;
+	/* 52px = the button with its outer padding; 18px gap like on other screens */
+	top: calc(var(--app-h) - 52px - 18px - env(safe-area-inset-bottom));
+}
+
+/* Full-screen chat: real screen height, and room for the status bar above the header */
+.isStandalone .aiDialog.sapMDialogStretched {
+	height: var(--app-h) !important;
+}
+.aiDialog.sapMDialogStretched {
+	padding-top: calc(3.5rem + env(safe-area-inset-top)) !important;
+}

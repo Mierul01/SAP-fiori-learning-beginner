@@ -46,6 +46,8 @@
 				var iShort = Math.min(screen.width, screen.height);
 				var iHeight = Math.max(window.innerHeight, bPortrait ? iLong : iShort);
 				document.documentElement.style.setProperty("--app-h", iHeight + "px");
+				// Lets style.css place fixed things (Ask AI button, chat) against the real screen height
+				document.documentElement.classList.add("isStandalone");
 			}
 			fitScreen();
 			window.addEventListener("resize", fitScreen);
