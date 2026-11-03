@@ -1071,3 +1071,31 @@ body.isScrolled::before {
 	padding: 0;
 	margin: 0;
 }
+
+/* Demo mode */
+.aiOr.sapMText {
+	color: #7a8a9c;
+	font-size: 0.75rem;
+	text-transform: uppercase;
+	letter-spacing: 0.08em;
+	margin-top: 4px;
+}
+.aiDemoBtn .sapMBtnInner {
+	border: 1px solid #d9cffd;
+	background: #f7f4ff;
+}
+.aiDemoBtn .sapMBtnInner .sapMBtnIcon,
+.aiDemoBtn .sapMBtnInner .sapMBtnContent {
+	color: #5a32d6;
+	font-weight: 700;
+}
+.aiBubble .aiDemoTag {
+	display: inline-block;
+	margin: 0 0 6px;
+	padding: 1px 8px;
+	border-radius: 999px;
+	background: #fff4ea;
+	color: #b35100;
+	font-size: 0.6875rem;
+	font-weight: 700;
+}

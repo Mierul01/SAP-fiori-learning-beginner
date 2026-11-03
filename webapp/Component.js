@@ -26,7 +26,7 @@ sap.ui.define([
 				edit: false,
 				newProduct: {},
 				// AI Assistant chat state
-				ai: { hasKey: false, keyInput: "", input: "", busy: false, messages: [], writing: false }
+				ai: { hasKey: false, demo: false, ready: false, keyInput: "", input: "", busy: false, messages: [], writing: false }
 			}), "view");
 
 			// Start routing: the URL hash decides which page is shown

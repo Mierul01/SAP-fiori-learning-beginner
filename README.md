@@ -40,6 +40,8 @@ The app uses **Claude** (`claude-opus-5-5`) through the official Anthropic JavaS
 
 **API key:** the site is static (GitHub Pages), so there is no server to keep a key secret. The first time you open the assistant, it asks for your own [Anthropic API key](https://console.anthropic.com/settings/keys). The key is saved only in that browser (`localStorage`) and sent only to Anthropic. The key button in the assistant header removes it. Don't use your key on a shared device.
 
+**Demo mode (free, no key):** on the key screen, **Try demo** lets anyone with the link try the assistant. These answers are **not** written by AI: simple rules in `webapp/model/aiDemo.js` read the live inventory (restock list, summary, value by category, promotion ideas, product review). Each one is labelled "Demo answer · not live AI". In demo mode, **Write with AI** fills in a template sentence.
+
 The code to look at: `webapp/model/ai.js` (SDK, streaming, errors), `webapp/controller/AiAssistant.js` (chat logic and the system prompt) and `webapp/view/AiAssistant.fragment.xml` (the chat UI).
 
 ## Put it on your phone's home screen

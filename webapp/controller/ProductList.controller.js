@@ -5,8 +5,9 @@ sap.ui.define([
 	"sap/ui/model/Sorter",
 	"sap/m/MessageToast",
 	"../model/formatter",
-	"../model/ai"
-], function (Controller, Filter, FilterOperator, Sorter, MessageToast, formatter, ai) {
+	"../model/ai",
+	"../model/aiDemo"
+], function (Controller, Filter, FilterOperator, Sorter, MessageToast, formatter, ai, aiDemo) {
 	"use strict";
 
 	// Which stat cell filters which stock level
@@ -333,14 +334,19 @@ sap.ui.define([
 				oViewModel.setProperty("/newProduct/nameState", "Error");
 				return;
 			}
+			oViewModel.setProperty("/ai/writing", true);
+
 			if (!ai.hasKey()) {
-				// No key yet: the assistant shows the key setup
-				MessageToast.show(this._getText("aiNeedKey"));
-				this.getOwnerComponent().getAiAssistant().open();
+				// No key: demo mode fills in a template sentence (not written by AI)
+				aiDemo.stream(aiDemo.description(oNew), function (sSoFar) {
+					oViewModel.setProperty("/newProduct/Description", sSoFar);
+				}).then(function () {
+					oViewModel.setProperty("/ai/writing", false);
+					MessageToast.show(this._getText("aiDemoWrite"));
+				}.bind(this));
 				return;
 			}
 
-			oViewModel.setProperty("/ai/writing", true);
 			ai.stream({
 				system: "You write short product descriptions for an electronics shop catalog in Malaysia. " +
 					"Reply with the description only: one sentence, at most 25 words, plain text, no quotes, no price.",

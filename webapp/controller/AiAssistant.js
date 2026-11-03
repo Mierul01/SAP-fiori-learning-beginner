@@ -3,12 +3,16 @@ sap.ui.define([
 	"sap/ui/core/Fragment",
 	"sap/ui/Device",
 	"sap/m/MessageToast",
-	"../model/ai"
-], function (BaseObject, Fragment, Device, MessageToast, ai) {
+	"../model/ai",
+	"../model/aiDemo"
+], function (BaseObject, Fragment, Device, MessageToast, ai, aiDemo) {
 	"use strict";
 
 	/*
-		The AI Assistant: a chat about the product catalog, answered by Claude.
+		The AI Assistant: a chat about the product catalog.
+		- With an Anthropic API key, Claude answers (model/ai.js).
+		- Without a key, "Try demo" answers with simple rules from the live
+		  inventory (model/aiDemo.js); those answers are labelled as demo.
 		One instance lives in the Component (getAiAssistant), so the list page and
 		the product page share the same chat.
 	*/
@@ -26,11 +30,29 @@ sap.ui.define([
 			return this._oComponent.getModel("i18n").getResourceBundle().getText(sKey, aArgs);
 		},
 
+		_products: function () {
+			return this._oComponent.getModel().getProperty("/Products");
+		},
+
+		// hasKey: real Claude; demo: rule-based answers; ready: the chat can be used
+		_setMode: function (bDemo) {
+			var oVM = this._view();
+			var bHasKey = ai.hasKey();
+			var bDemoOn = !bHasKey && !!bDemo;
+			oVM.setProperty("/ai/hasKey", bHasKey);
+			oVM.setProperty("/ai/demo", bDemoOn);
+			oVM.setProperty("/ai/ready", bHasKey || bDemoOn);
+		},
+
+		isReady: function () {
+			return !!this._view().getProperty("/ai/ready");
+		},
+
 		// ---------- Open / close ----------
 
 		/** Opens the chat. sQuestion (optional) is asked straight away. */
 		open: function (sQuestion) {
-			this._view().setProperty("/ai/hasKey", ai.hasKey());
+			this._setMode(this._view().getProperty("/ai/demo"));
 
 			if (!this._pDialog) {
 				this._pDialog = Fragment.load({
@@ -48,7 +70,7 @@ sap.ui.define([
 
 			this._pDialog.then(function (oDialog) {
 				oDialog.open();
-				if (sQuestion && ai.hasKey()) {
+				if (sQuestion && this.isReady()) {
 					this.ask(sQuestion);
 				}
 			}.bind(this));
@@ -60,7 +82,7 @@ sap.ui.define([
 			});
 		},
 
-		// ---------- API key ----------
+		// ---------- API key and demo mode ----------
 
 		onSaveKey: function () {
 			var sKey = (this._view().getProperty("/ai/keyInput") || "").trim();
@@ -69,14 +91,27 @@ sap.ui.define([
 			}
 			ai.setKey(sKey);
 			this._view().setProperty("/ai/keyInput", "");
-			this._view().setProperty("/ai/hasKey", true);
+			this._view().setProperty("/ai/messages", []);
+			this._setMode(false);
 			MessageToast.show(this._getText("aiKeySaved"));
 		},
 
 		onForgetKey: function () {
 			ai.clearKey();
-			this._view().setProperty("/ai/hasKey", false);
+			this._view().setProperty("/ai/messages", []);
+			this._setMode(false);
 			MessageToast.show(this._getText("aiKeyRemoved"));
+		},
+
+		onTryDemo: function () {
+			this._view().setProperty("/ai/messages", []);
+			this._setMode(true);
+		},
+
+		// Leave demo mode and show the key screen again
+		onExitDemo: function () {
+			this._view().setProperty("/ai/messages", []);
+			this._setMode(false);
 		},
 
 		// ---------- Chat ----------
@@ -102,6 +137,7 @@ sap.ui.define([
 			if (oVM.getProperty("/ai/busy")) {
 				return;
 			}
+			var bDemo = oVM.getProperty("/ai/demo");
 
 			var aMessages = oVM.getProperty("/ai/messages").concat([
 				{ role: "user", text: sQuestion, html: ai.toHtml(sQuestion) },
@@ -112,16 +148,26 @@ sap.ui.define([
 			oVM.setProperty("/ai/busy", true);
 			this._scrollDown();
 
-			// The conversation so far (without the empty answer we are about to fill)
-			var aHistory = aMessages.slice(0, iAnswer).map(function (m) {
-				return { role: m.role, content: m.text };
-			});
-
-			ai.stream({ system: this._systemPrompt(), messages: aHistory }, function (sSoFar) {
+			// Demo answers carry a small label so nobody mistakes them for live AI
+			var sDemoTag = bDemo ? "<p class=\"aiDemoTag\">" + this._getText("aiDemoTag") + "</p>" : "";
+			var fnOnText = function (sSoFar) {
 				oVM.setProperty("/ai/messages/" + iAnswer + "/text", sSoFar);
-				oVM.setProperty("/ai/messages/" + iAnswer + "/html", ai.toHtml(sSoFar));
+				oVM.setProperty("/ai/messages/" + iAnswer + "/html", sDemoTag + ai.toHtml(sSoFar));
 				this._scrollDown();
-			}.bind(this)).catch(function (oError) {
+			}.bind(this);
+
+			var pAnswer;
+			if (bDemo) {
+				pAnswer = aiDemo.stream(aiDemo.answer(sQuestion, this._products()), fnOnText);
+			} else {
+				// The conversation so far (without the empty answer we are about to fill)
+				var aHistory = aMessages.slice(0, iAnswer).map(function (m) {
+					return { role: m.role, content: m.text };
+				});
+				pAnswer = ai.stream({ system: this._systemPrompt(), messages: aHistory }, fnOnText);
+			}
+
+			pAnswer.catch(function (oError) {
 				var sKey = {
 					auth: "aiErrorAuth",
 					rate: "aiErrorRate",
@@ -134,7 +180,7 @@ sap.ui.define([
 				if (oError.kind === "auth") {
 					// Wrong key: forget it so the user can enter a new one
 					ai.clearKey();
-					oVM.setProperty("/ai/hasKey", false);
+					this._setMode(false);
 				}
 			}.bind(this)).finally(function () {
 				oVM.setProperty("/ai/busy", false);
@@ -144,7 +190,7 @@ sap.ui.define([
 
 		// Claude gets the live product list with every question
 		_systemPrompt: function () {
-			var aProducts = this._oComponent.getModel().getProperty("/Products").map(function (p) {
+			var aProducts = this._products().map(function (p) {
 				return {
 					id: p.ProductID,
 					name: p.Name,
