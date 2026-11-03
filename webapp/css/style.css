@@ -27,6 +27,8 @@ html, body, .sapMPageEnableScrolling, .sapMDialogScroll, .sapMSltPicker * {
 		radial-gradient(circle at calc(100% - 300px) 110px, rgba(255, 255, 255, 0.06) 0 80px, transparent 81px),
 		linear-gradient(120deg, #0064d9 0%, #0a4aa8 60%, #163a7a 100%);
 	padding: 16px 14px 50px;
+	/* On phones the header also fills the space under the status bar (notch) */
+	padding-top: calc(16px + env(safe-area-inset-top));
 }
 
 .heroInner {
@@ -692,4 +694,18 @@ html, body, .sapMPageEnableScrolling, .sapMDialogScroll, .sapMSltPicker * {
 	.productTitleRow .priceText.sapMText {
 		font-size: 0.875rem;
 	}
+}
+
+/* Keep content clear of the iPhone home bar at the bottom */
+.pageBody {
+	padding-bottom: calc(14px + env(safe-area-inset-bottom));
+}
+
+/* Compact order quantity: number in the middle, just wide enough for 3 digits */
+.qtyInput.sapMStepInput {
+	width: 7.5rem !important;
+}
+.qtyInput .sapMInputBaseInner {
+	text-align: center;
+	font-weight: 700;
 }
