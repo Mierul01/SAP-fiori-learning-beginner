@@ -19,7 +19,7 @@
 					<core:Icon src="sap-icon://ai" class="aiHeaderIcon"/>
 					<VBox class="aiHeaderText" justifyContent="Center">
 						<Title text="{i18n>aiTitle}" level="H2" class="aiHeaderTitle"/>
-						<Text text="{= ${view>/ai/demo} ? ${i18n>aiDemoSub} : ${i18n>aiPoweredBy} }" class="aiHeaderSub"/>
+						<Text text="{= ${view>/ai/demo} ? ${i18n>aiDemoSub} : ${view>/ai/poweredBy} }" class="aiHeaderSub"/>
 					</VBox>
 				</contentLeft>
 				<contentRight>
@@ -27,7 +27,7 @@
 						press=".onClear" visible="{= ${view>/ai/ready} &amp;&amp; ${view>/ai/messages}.length > 0 }" class="aiHeaderBtn"/>
 					<Button icon="sap-icon://key" type="Transparent" tooltip="{i18n>aiForgetKey}"
 						press=".onForgetKey" visible="{view>/ai/hasKey}" class="aiHeaderBtn"/>
-					<!-- In demo mode: go back to the key screen to connect real Claude -->
+					<!-- In demo mode: go back to the key screen to connect a real AI -->
 					<Button icon="sap-icon://connected" type="Transparent" tooltip="{i18n>aiConnect}"
 						press=".onExitDemo" visible="{view>/ai/demo}" class="aiHeaderBtn"/>
 					<Button icon="sap-icon://decline" type="Transparent" tooltip="{i18n>btnClose}"
@@ -36,22 +36,43 @@
 			</Bar>
 		</customHeader>
 
-		<!-- 1. First time: ask for an Anthropic API key -->
+		<!-- 1. Connect an AI: pick a provider, paste its API key (model/ai.js) -->
 		<VBox class="aiSetup" visible="{= !${view>/ai/ready} }">
 			<core:Icon src="sap-icon://ai" class="aiSetupIcon"/>
 			<Title text="{i18n>aiSetupTitle}" level="H3" wrapping="true" class="aiSetupTitle"/>
 			<Text text="{i18n>aiSetupText}" class="mutedText"/>
-			<Input
-				id="aiKeyInput"
-				type="Password"
-				value="{view>/ai/keyInput}"
-				placeholder="sk-ant-..."
-				submit=".onSaveKey"
-				width="100%"
-				class="sapUiSmallMarginTop"/>
+
+			<VBox class="aiSetupForm">
+				<Label text="{i18n>aiLblProvider}" labelFor="aiProvider"/>
+				<Select id="aiProvider" selectedKey="{view>/ai/setup/provider}" change=".onProviderChange" width="100%">
+					<core:Item key="claude" text="Claude (Anthropic)"/>
+					<core:Item key="openai" text="ChatGPT (OpenAI)"/>
+					<core:Item key="gemini" text="Gemini (Google)"/>
+					<core:Item key="openrouter" text="OpenRouter (has free models)"/>
+				</Select>
+
+				<Label text="{i18n>aiLblKey}" labelFor="aiKeyInput"/>
+				<Input
+					id="aiKeyInput"
+					type="Password"
+					value="{view>/ai/setup/key}"
+					placeholder="{view>/ai/setup/keyHint}"
+					liveChange=".onKeyLiveChange"
+					submit=".onSaveKey"
+					width="100%"/>
+
+				<Label text="{i18n>aiLblModel}" labelFor="aiModelInput"/>
+				<Input
+					id="aiModelInput"
+					value="{view>/ai/setup/model}"
+					placeholder="{view>/ai/setup/defaultModel}"
+					submit=".onSaveKey"
+					width="100%"/>
+			</VBox>
+
 			<Button text="{i18n>aiSaveKey}" type="Emphasized" icon="sap-icon://accept" press=".onSaveKey" width="100%"/>
 			<Text text="{i18n>aiKeyNote}" class="aiKeyNote"/>
-			<Link text="{i18n>aiGetKey}" href="https://console.anthropic.com/settings/keys" target="_blank"/>
+			<Link text="{i18n>aiGetKey}" href="{view>/ai/setup/keyUrl}" target="_blank"/>
 
 			<!-- No key? Demo mode answers from the live inventory with simple rules (model/aiDemo.js) -->
 			<Text text="{i18n>aiOr}" class="aiOr"/>

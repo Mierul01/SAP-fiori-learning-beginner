@@ -5,7 +5,7 @@ sap.ui.define([], function () {
 		Demo mode for the AI Assistant: works without an API key.
 
 		These answers are NOT written by an AI model. Simple rules read the live
-		product list (the same data Claude would get) and build the reply, so
+		product list (the same data a real AI would get) and build the reply, so
 		anyone with the link can try the assistant for free. Every answer is
 		labelled "Demo answer" in the chat.
 	*/
@@ -131,7 +131,7 @@ sap.ui.define([], function () {
 			"- Which category holds the most value?",
 			"- Suggest a promotion for slow stock",
 			"",
-			"Tap the connect icon at the top to use real Claude AI and ask anything."
+			"Tap the connect icon at the top to use a real AI (Claude, ChatGPT, Gemini...) and ask anything."
 		].join("\n");
 	}
 

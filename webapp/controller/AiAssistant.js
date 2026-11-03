@@ -10,7 +10,7 @@ sap.ui.define([
 
 	/*
 		The AI Assistant: a chat about the product catalog.
-		- With an Anthropic API key, Claude answers (model/ai.js).
+		- With an API key (Claude, ChatGPT, Gemini or OpenRouter), that AI answers (model/ai.js).
 		- Without a key, "Try demo" answers with simple rules from the live
 		  inventory (model/aiDemo.js); those answers are labelled as demo.
 		One instance lives in the Component (getAiAssistant), so the list page and
@@ -34,7 +34,7 @@ sap.ui.define([
 			return this._oComponent.getModel().getProperty("/Products");
 		},
 
-		// hasKey: real Claude; demo: rule-based answers; ready: the chat can be used
+		// hasKey: a real AI is connected; demo: rule-based answers; ready: the chat can be used
 		_setMode: function (bDemo) {
 			var oVM = this._view();
 			var bHasKey = ai.hasKey();
@@ -42,6 +42,21 @@ sap.ui.define([
 			oVM.setProperty("/ai/hasKey", bHasKey);
 			oVM.setProperty("/ai/demo", bDemoOn);
 			oVM.setProperty("/ai/ready", bHasKey || bDemoOn);
+			oVM.setProperty("/ai/poweredBy", bHasKey ?
+				this._getText("aiPoweredBy", [ai.providerName()]) : this._getText("aiNotConnected"));
+			if (!oVM.getProperty("/ai/setup/provider")) {
+				this._setProvider("claude");
+			}
+		},
+
+		// Fills the key screen hints (key format, default model, where to get a key)
+		_setProvider: function (sProvider) {
+			var oProvider = ai.PROVIDERS[sProvider];
+			var oVM = this._view();
+			oVM.setProperty("/ai/setup/provider", sProvider);
+			oVM.setProperty("/ai/setup/keyHint", oProvider.keyHint);
+			oVM.setProperty("/ai/setup/defaultModel", oProvider.model);
+			oVM.setProperty("/ai/setup/keyUrl", oProvider.keyUrl);
 		},
 
 		isReady: function () {
@@ -53,7 +68,7 @@ sap.ui.define([
 		/**
 		 * Opens the chat. sQuestion (optional) is asked straight away.
 		 * Without a key it opens straight into demo mode, unless the user chose
-		 * "connect Claude" (the plug icon), which shows the key screen.
+		 * "connect an AI" (the plug icon), which shows the key screen.
 		 */
 		open: function (sQuestion) {
 			this._setMode(!this._bShowKeyScreen);
@@ -88,16 +103,31 @@ sap.ui.define([
 
 		// ---------- API key and demo mode ----------
 
+		onProviderChange: function (oEvent) {
+			this._setProvider(oEvent.getParameter("selectedItem").getKey());
+		},
+
+		// Pasting a key picks the matching provider (sk-ant- = Claude, AIza = Gemini, ...)
+		onKeyLiveChange: function (oEvent) {
+			var sProvider = ai.detectProvider(oEvent.getParameter("value"));
+			if (sProvider && sProvider !== this._view().getProperty("/ai/setup/provider")) {
+				this._setProvider(sProvider);
+			}
+		},
+
 		onSaveKey: function () {
-			var sKey = (this._view().getProperty("/ai/keyInput") || "").trim();
+			var oVM = this._view();
+			var sKey = (oVM.getProperty("/ai/setup/key") || "").trim();
 			if (!sKey) {
 				return;
 			}
-			ai.setKey(sKey);
-			this._view().setProperty("/ai/keyInput", "");
-			this._view().setProperty("/ai/messages", []);
+			var sProvider = oVM.getProperty("/ai/setup/provider");
+			ai.setConnection(sProvider, sKey, (oVM.getProperty("/ai/setup/model") || "").trim());
+			oVM.setProperty("/ai/setup/key", "");
+			oVM.setProperty("/ai/setup/model", "");
+			oVM.setProperty("/ai/messages", []);
 			this._setMode(false);
-			MessageToast.show(this._getText("aiKeySaved"));
+			MessageToast.show(this._getText("aiKeySaved", [ai.providerName()]));
 		},
 
 		onForgetKey: function () {
@@ -179,6 +209,7 @@ sap.ui.define([
 					auth: "aiErrorAuth",
 					rate: "aiErrorRate",
 					network: "aiErrorNetwork",
+					model: "aiErrorModel",
 					refusal: "aiErrorRefusal"
 				}[oError.kind] || "aiErrorOther";
 				var sMessage = this._getText(sKey);
@@ -195,7 +226,7 @@ sap.ui.define([
 			}.bind(this));
 		},
 
-		// Claude gets the live product list with every question
+		// The AI gets the live product list with every question
 		_systemPrompt: function () {
 			var aProducts = this._products().map(function (p) {
 				return {

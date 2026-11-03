@@ -28,19 +28,26 @@ Then open <http://localhost:8080>.
 
 > Opening `index.html` by double-clicking does not work. UI5 loads its views over HTTP, so it needs a web server.
 
-## AI features (Claude)
+## AI features
 
-The app uses **Claude** (`claude-opus-5-5`) through the official Anthropic JavaScript SDK, loaded in the browser.
+The AI Assistant works with the AI provider you choose:
+
+| Provider | Default model (change it in the "Model" field) | How it connects |
+|---|---|---|
+| Claude (Anthropic) | `claude-opus-5-5` | Official Anthropic JavaScript SDK, loaded in the browser |
+| ChatGPT (OpenAI) | `gpt-5-mini` | Chat Completions API |
+| Gemini (Google) | `gemini-3.5-flash-lite` | Gemini `streamGenerateContent` API |
+| OpenRouter | `openrouter/free` (one of OpenRouter's free models) | Chat Completions API |
 
 | Feature | Where | What happens |
 |---|---|---|
-| **AI Assistant** | "Ask AI" button (bottom right) | A chat. Each question is sent with the current product list, so Claude can answer "What should I restock?" or "Which category holds the most value?". Answers stream in word by word. |
+| **AI Assistant** | "Ask AI" button (bottom right) | A chat. Each question is sent with the current product list, so the AI can answer "What should I restock?" or "Which category holds the most value?". Answers stream in word by word. |
 | **Ask AI about this product** | Product page, Stock card | Opens the assistant and asks for a quick review of that product: stock level, how many to reorder and a sales idea. |
-| **Write with AI** | Add product dialog | Claude writes a one-sentence description from the name, category and price. |
+| **Write with AI** | Add product dialog | The AI writes a one-sentence description from the name, category and price. |
 
-**API key:** the site is static (GitHub Pages), so there is no server to keep a key secret. The first time you open the assistant, it asks for your own [Anthropic API key](https://console.anthropic.com/settings/keys). The key is saved only in that browser (`localStorage`) and sent only to Anthropic. The key button in the assistant header removes it. Don't use your key on a shared device.
+**API key:** the site is static (GitHub Pages), so there is no server to keep a key secret. Tap the connect (plug) icon in the assistant, choose a provider and paste your own API key. Pasting a key picks the provider for you (`sk-ant-` = Claude, `sk-or-` = OpenRouter, `sk-` = OpenAI, `AIza` / `AQ.` = Gemini). The key is saved only in that browser (`localStorage`) and sent only to that provider. The key button in the assistant header removes it. Never put a key in the code, and don't use your key on a shared device.
 
-**Demo mode (free, no key):** without a key, **Ask AI** opens straight into the demo chat, so anyone with the link try the assistant. These answers are **not** written by AI: simple rules in `webapp/model/aiDemo.js` read the live inventory (restock list, summary, value by category, promotion ideas, product review). Each one is labelled "Demo answer · not live AI". In demo mode, **Write with AI** fills in a template sentence.
+**Demo mode (free, no key):** without a key, **Ask AI** opens straight into the demo chat, so anyone with the link can try the assistant. These answers are **not** written by AI: simple rules in `webapp/model/aiDemo.js` read the live inventory (restock list, summary, value by category, promotion ideas, product review). Each one is labelled "Demo answer · not live AI". In demo mode, **Write with AI** fills in a template sentence.
 
 The code to look at: `webapp/model/ai.js` (SDK, streaming, errors), `webapp/controller/AiAssistant.js` (chat logic and the system prompt) and `webapp/view/AiAssistant.fragment.xml` (the chat UI).
 

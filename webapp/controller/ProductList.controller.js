@@ -319,13 +319,13 @@ sap.ui.define([
 			this.byId("addDialog").close();
 		},
 
-		// ---------- AI (Claude) ----------
+		// ---------- AI ----------
 
 		onAskAi: function () {
 			this.getOwnerComponent().getAiAssistant().open();
 		},
 
-		// "Write with AI": Claude writes a one-line description, streamed into the TextArea
+		// "Write with AI": the connected AI writes a one-line description, streamed into the TextArea
 		onAiDescription: function () {
 			var oViewModel = this.getOwnerComponent().getModel("view");
 			var oNew = oViewModel.getProperty("/newProduct");

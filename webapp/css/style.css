@@ -1152,3 +1152,16 @@ body.isScrolled::before {
 .aiDialog.sapMDialogStretched {
 	padding-top: calc(3.5rem + env(safe-area-inset-top)) !important;
 }
+
+/* Key screen form: labels left-aligned above each field */
+.aiSetupForm {
+	width: 100%;
+	gap: 4px;
+	text-align: left;
+	margin-top: 6px;
+}
+.aiSetupForm .sapMLabel {
+	color: #556b82;
+	font-size: 0.8125rem;
+	margin-top: 6px;
+}

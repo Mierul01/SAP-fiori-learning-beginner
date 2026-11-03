@@ -115,7 +115,7 @@ sap.ui.define([
 			MessageToast.show(this._getText("orderDone", [iQty, oContext.getProperty("Name"), iNewStock]));
 		},
 
-		// ---------- AI (Claude) ----------
+		// ---------- AI ----------
 
 		// Opens the AI Assistant and asks about this product straight away
 		onAskAi: function () {
