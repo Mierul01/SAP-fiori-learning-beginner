@@ -1,12 +1,11 @@
 sap.ui.define([
 	"sap/ui/core/mvc/Controller",
-	"sap/ui/core/format/NumberFormat",
 	"sap/ui/model/Filter",
 	"sap/ui/model/FilterOperator",
 	"sap/ui/model/Sorter",
 	"sap/m/MessageToast",
 	"../model/formatter"
-], function (Controller, NumberFormat, Filter, FilterOperator, Sorter, MessageToast, formatter) {
+], function (Controller, Filter, FilterOperator, Sorter, MessageToast, formatter) {
 	"use strict";
 
 	// Which stat cell filters which stock level
@@ -92,11 +91,10 @@ sap.ui.define([
 				});
 				var fMax = Math.max.apply(null, aCatValues) || 1;
 
-				var oShort = NumberFormat.getFloatInstance({ style: "short", maxFractionDigits: 1 });
 				var iOk = count("ok"), iLow = count("low"), iOut = count("out");
 
 				oViewModel.setProperty("/kpi", {
-					valueText: "RM " + oShort.format(fValue),
+					valueText: formatter.priceShort(fValue),
 					valueSub: this._getText("unitsInStock", [iUnits]),
 					catBars: aCatValues.map(function (v) {
 						return Math.max(10, Math.round(v / fMax * 100));

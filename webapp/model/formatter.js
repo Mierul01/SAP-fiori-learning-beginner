@@ -1,16 +1,26 @@
 sap.ui.define([
-	"sap/ui/core/format/NumberFormat"
-], function (NumberFormat) {
+	"sap/ui/core/format/NumberFormat",
+	"sap/ui/core/Locale"
+], function (NumberFormat, Locale) {
 	"use strict";
 
 	var MAX_STOCK = 50; // a "full shelf", used for the stock bars
+
+	// Always format money the Malaysian way (1,234.50), whatever language the phone uses
+	var MY_LOCALE = new Locale("en-MY");
 
 	// 1234.5 -> "1,234.50"
 	var oMoney = NumberFormat.getFloatInstance({
 		minFractionDigits: 2,
 		maxFractionDigits: 2,
 		groupingEnabled: true
-	});
+	}, MY_LOCALE);
+
+	// 796400 -> "796.4K"
+	var oShortMoney = NumberFormat.getFloatInstance({
+		style: "short",
+		maxFractionDigits: 1
+	}, MY_LOCALE);
 
 	var STOCK_CLASSES = { Success: "ok", Warning: "low", Error: "out" };
 
@@ -55,6 +65,11 @@ sap.ui.define([
 		// Price in Malaysian ringgit, e.g. "RM 4,780.00"
 		price: function (fPrice) {
 			return "RM " + oMoney.format(fPrice || 0);
+		},
+
+		// Short price for the stat strip, e.g. "RM 796.4K"
+		priceShort: function (fPrice) {
+			return "RM " + oShortMoney.format(fPrice || 0);
 		},
 
 		// Stock cell: coloured status + count, and a thin bar showing how full the shelf is

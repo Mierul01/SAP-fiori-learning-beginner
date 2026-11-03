@@ -264,12 +264,6 @@ html, body, .sapMPageEnableScrolling, .sapMDialogScroll, .sapMSltPicker * {
 	padding: 2px 4px 10px;
 }
 
-.tableSheet .sapMTB.sapMTBHeader-CTX {
-	background: transparent;
-	border-bottom: 1px solid #edf1f5;
-	padding: 0 12px;
-	height: 3.5rem;
-}
 
 /* Pager under the table: one slim row */
 .tableSheet {
@@ -488,9 +482,6 @@ html, body, .sapMPageEnableScrolling, .sapMDialogScroll, .sapMSltPicker * {
 	.heroSubtitle.sapMText {
 		display: none;
 	}
-	.tableSheet .sapMTB.sapMTBHeader-CTX {
-		padding: 0 8px;
-	}
 }
 
 /* ---------- Price and stock cells ---------- */
@@ -569,5 +560,136 @@ html, body, .sapMPageEnableScrolling, .sapMDialogScroll, .sapMSltPicker * {
 	/* Price drops under the name on a phone, so line it up on the left */
 	.detailPriceBox {
 		align-items: flex-start;
+	}
+}
+
+/* ---------- Table header (title + tools) ---------- */
+.tableHeader {
+	padding: 12px 14px;
+	border-bottom: 1px solid #edf1f5;
+	gap: 10px;
+}
+.tableTitle.sapMTitle {
+	font-size: 1rem;
+	font-weight: 700;
+	color: #1d2d3e;
+}
+.tableTools {
+	gap: 8px;
+}
+
+/* Product cell: name + ID (and on a phone: price, category and stock) */
+.productMain {
+	flex: 1;
+	min-width: 0;
+}
+.productTitleRow {
+	gap: 10px;
+}
+.mobileOnly {
+	display: none !important;
+}
+
+/* ---------- Phone (UI5 hides the "Tablet" columns below 600px) ---------- */
+@media (max-width: 599px) {
+	.pageBody {
+		padding: 0 12px 12px;
+	}
+
+	/* Hero: two equal buttons under the title */
+	.heroInner > .sapMFlexItem:last-child,
+	.heroActions {
+		width: 100%;
+	}
+	/* UI5 puts flex as an inline style on each item, so !important is needed */
+	.heroActions > .sapMFlexItem {
+		flex: 1 1 0 !important;
+	}
+	.heroActions .sapMBtn {
+		width: 100%;
+	}
+
+	/* Stats: tighter 2 x 2 grid */
+	.stat {
+		padding: 10px 12px;
+		gap: 10px;
+	}
+	.statIcon.sapUiIcon {
+		width: 30px;
+		height: 30px;
+		line-height: 30px;
+		min-width: 30px;
+		font-size: 0.875rem;
+		border-radius: 9px;
+	}
+	.statValue.sapMText {
+		font-size: 1.0625rem;
+		white-space: nowrap;
+	}
+	.statSub.sapMText {
+		display: none;
+	}
+
+	/* Tools: full-width search, then category and sort side by side */
+	.tableHeader > .sapMFlexItem:last-child,
+	.tableTools {
+		width: 100%;
+	}
+	.tableTools > .sapMFlexItem:first-child {
+		flex: 1 1 100% !important;
+	}
+	.tableTools > .sapMFlexItem:not(:first-child) {
+		flex: 1 1 0 !important;
+		min-width: 0 !important;
+	}
+	.tableTools .sapMSF,
+	.tableTools .sapMSlt {
+		width: 100% !important;
+		max-width: none !important;
+	}
+
+	/* The only visible column is "Product", so its header adds nothing */
+	.productTable .sapMListTblHeader th {
+		height: 0;
+		padding-top: 0;
+		padding-bottom: 0;
+		border: none;
+		font-size: 0;
+		line-height: 0;
+	}
+	.productTable .sapMListTblHeader th > * {
+		display: none;
+	}
+	.productTable .sapMListTblHeader,
+	.productTable .sapMListTblHeader th {
+		height: 0 !important;
+		min-height: 0 !important;
+		border: none !important;
+	}
+	/* Let the Product column use the full width */
+	.productTable .sapMListTblHeader th.sapMListTblCell {
+		width: auto !important;
+	}
+	.productTable .sapMListTblCell {
+		padding-top: 10px;
+		padding-bottom: 10px;
+	}
+
+	/* Phone-only details inside the product cell */
+	.mobileOnly.sapMText {
+		display: block !important;
+	}
+	.mobileOnly.sapMFlexBox {
+		display: flex !important;
+	}
+	.mobileMeta {
+		margin-top: 6px;
+		gap: 12px;
+	}
+	.mobileMeta .stockMeter {
+		width: 8.5rem;
+	}
+	.productTitleRow .priceText.sapMText {
+		font-size: 0.875rem;
 	}
 }

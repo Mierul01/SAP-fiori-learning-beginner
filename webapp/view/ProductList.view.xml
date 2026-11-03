@@ -71,6 +71,31 @@
 					The controller re-binds it with startIndex + length to show 10 rows per page.
 				-->
 				<VBox class="sheet tableSheet">
+					<!-- Table header: title + search, category and sort. On a phone the tools wrap under the title. -->
+					<HBox class="tableHeader" justifyContent="SpaceBetween" alignItems="Center" wrap="Wrap">
+						<Title text="{view>/listTitle}" level="H2" class="tableTitle"/>
+						<HBox class="tableTools" alignItems="Center" wrap="Wrap">
+							<SearchField
+								id="searchField"
+								width="15rem"
+								placeholder="{i18n>searchPlaceholder}"
+								liveChange=".onFilterChange"/>
+							<Select id="categorySelect" change=".onFilterChange" width="10rem">
+								<core:Item key="" text="{i18n>allCategories}"/>
+								<core:Item key="Laptops" text="Laptops"/>
+								<core:Item key="Monitors" text="Monitors"/>
+								<core:Item key="Accessories" text="Accessories"/>
+								<core:Item key="Printers" text="Printers"/>
+							</Select>
+							<Select id="sortSelect" change=".onSortChange" width="11rem" icon="sap-icon://sort">
+								<core:Item key="name" text="{i18n>sortName}"/>
+								<core:Item key="priceAsc" text="{i18n>sortPriceAsc}"/>
+								<core:Item key="priceDesc" text="{i18n>sortPriceDesc}"/>
+								<core:Item key="stockAsc" text="{i18n>sortStockAsc}"/>
+							</Select>
+						</HBox>
+					</HBox>
+
 					<Table
 						id="productTable"
 						items="{
@@ -81,31 +106,6 @@
 						noDataText="{i18n>noData}"
 						updateFinished=".onUpdateFinished"
 						class="productTable">
-						<headerToolbar>
-							<OverflowToolbar>
-								<Title text="{view>/listTitle}" level="H2"/>
-								<ToolbarSpacer/>
-								<SearchField
-									id="searchField"
-									width="15rem"
-									placeholder="{i18n>searchPlaceholder}"
-									liveChange=".onFilterChange"/>
-								<Select id="categorySelect" change=".onFilterChange" width="10rem">
-									<core:Item key="" text="{i18n>allCategories}"/>
-									<core:Item key="Laptops" text="Laptops"/>
-									<core:Item key="Monitors" text="Monitors"/>
-									<core:Item key="Accessories" text="Accessories"/>
-									<core:Item key="Printers" text="Printers"/>
-								</Select>
-								<Select id="sortSelect" change=".onSortChange" width="11rem" icon="sap-icon://sort">
-									<core:Item key="name" text="{i18n>sortName}"/>
-									<core:Item key="priceAsc" text="{i18n>sortPriceAsc}"/>
-									<core:Item key="priceDesc" text="{i18n>sortPriceDesc}"/>
-									<core:Item key="stockAsc" text="{i18n>sortStockAsc}"/>
-								</Select>
-							</OverflowToolbar>
-						</headerToolbar>
-
 						<!-- Info bar: only visible while a filter is on -->
 						<infoToolbar>
 							<OverflowToolbar visible="{view>/filterActive}" class="filterInfo">
@@ -124,16 +124,17 @@
 							<Column minScreenWidth="Desktop" demandPopin="false">
 								<Text text="{i18n>lblDescription}"/>
 							</Column>
-							<Column minScreenWidth="Tablet" demandPopin="true" popinDisplay="WithoutHeader" width="8rem">
+							<!-- On a phone these columns hide; the product cell shows price, category and stock instead -->
+							<Column minScreenWidth="Tablet" demandPopin="false" width="8rem">
 								<Text text="{i18n>colCategory}"/>
 							</Column>
 							<Column minScreenWidth="Desktop" demandPopin="false" width="10rem">
 								<Text text="{i18n>colSupplier}"/>
 							</Column>
-							<Column minScreenWidth="Tablet" demandPopin="true" popinDisplay="WithoutHeader" width="9.5rem">
+							<Column minScreenWidth="Tablet" demandPopin="false" width="9.5rem">
 								<Text text="{i18n>colStock}"/>
 							</Column>
-							<Column hAlign="End" minScreenWidth="Tablet" demandPopin="true" popinDisplay="WithoutHeader" width="8.5rem">
+							<Column hAlign="End" minScreenWidth="Tablet" demandPopin="false" width="8.5rem">
 								<Text text="{i18n>colPrice}"/>
 							</Column>
 						</columns>
@@ -149,7 +150,18 @@
 											displaySize="XS"
 											displayShape="Square"
 											class="productAvatar"/>
-										<ObjectIdentifier title="{Name}" text="{ProductID}"/>
+										<VBox class="productMain">
+											<HBox class="productTitleRow" justifyContent="SpaceBetween" alignItems="Start">
+												<ObjectIdentifier title="{Name}" text="{ProductID}"/>
+												<!-- Phone only: price next to the name -->
+												<Text text="{ path: 'Price', formatter: '.formatter.price' }" class="priceText mobileOnly" wrapping="false"/>
+											</HBox>
+											<!-- Phone only: category and stock under the name -->
+											<HBox class="mobileOnly mobileMeta" justifyContent="SpaceBetween" alignItems="Center">
+												<Text text="{Category}" class="mutedText"/>
+												<core:HTML content="{ path: 'Stock', formatter: '.formatter.stockMeter' }"/>
+											</HBox>
+										</VBox>
 									</HBox>
 									<Text text="{Description}" maxLines="2" class="mutedText"/>
 									<Text text="{Category}"/>
