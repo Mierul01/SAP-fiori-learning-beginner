@@ -59,6 +59,39 @@ sap.ui.define([
 			this.getOwnerComponent().getRouter()
 				.getRoute("list")
 				.attachPatternMatched(this._updateKpis, this);
+
+			// The product page's bottom bar sends its actions here (see ProductDetail.controller.js)
+			this.getOwnerComponent().getEventBus().subscribe("bottomNav", "action", function (sChannel, sEvent, oData) {
+				var fnAction = {
+					alerts: this.onTabAlerts,
+					add: this.onAddProduct,
+					"export": this.onExport
+				}[oData.key];
+				if (fnAction) {
+					fnAction.call(this);
+				}
+			}, this);
+		},
+
+		// ---------- Bottom menu bar (phones) ----------
+
+		_scrollTo: function (oDomRef) {
+			if (oDomRef) {
+				oDomRef.scrollIntoView({ behavior: "smooth", block: "start" });
+			}
+		},
+
+		// Products: back to the top of the page
+		onTabHome: function () {
+			this._scrollTo(this.getView().getDomRef());
+		},
+
+		// Low stock: filter the table and scroll to it
+		onTabAlerts: function () {
+			if (this._sStockKey !== "low") {
+				this._setStockFilter("statLow");
+			}
+			this._scrollTo(this.byId("productTable").getDomRef());
 		},
 
 		_getText: function (sKey, aArgs) {

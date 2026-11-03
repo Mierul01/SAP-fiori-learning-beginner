@@ -16,11 +16,11 @@
 	<meta name="apple-mobile-web-app-capable" content="yes">
 	<meta name="apple-mobile-web-app-title" content="Catalog">
 	<!--
-		"default" keeps the iPhone status bar (time, battery) above the app.
-		"black-translucent" draws the app under it, but then iOS shows the page one
-		status-bar height too short, leaving a white strip at the bottom.
+		"black-translucent" lets the blue header run behind the iPhone status bar
+		(time, battery). iOS then shows the page one status-bar height shorter, so
+		phones get a bottom menu bar (BottomBar.fragment.xml) at the bottom edge.
 	-->
-	<meta name="apple-mobile-web-app-status-bar-style" content="default">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
 	<!--
 		Step 1: Bootstrap SAPUI5 (the UI library behind SAP Fiori).
@@ -36,6 +36,19 @@
 		data-sap-ui-async="true"
 		data-sap-ui-resource-roots='{ "fiori.beginner.products": "./" }'
 		data-sap-ui-on-init="module:sap/ui/core/ComponentSupport">
+	</script>
+
+	<!-- Show a blue strip behind the status bar once the page is scrolled (see body::before in style.css) -->
+	<script>
+		document.addEventListener("scroll", function (oEvent) {
+			var oTarget = oEvent.target;
+			if (oTarget && typeof oTarget.scrollTop === "number" && document.body) {
+				document.body.classList.toggle("isScrolled", oTarget.scrollTop > 8);
+			}
+		}, true);
+		window.addEventListener("hashchange", function () {
+			document.body.classList.remove("isScrolled");
+		});
 	</script>
 </head>
 

@@ -125,6 +125,36 @@ sap.ui.define([
 			);
 		},
 
+		// ---------- Bottom menu bar (phones) ----------
+
+		// Go to the list, then let the list page run the action (ProductList.controller.js)
+		_runOnList: function (sKey) {
+			this.onTabHome();
+			setTimeout(function () {
+				this.getOwnerComponent().getEventBus().publish("bottomNav", "action", { key: sKey });
+			}.bind(this), 450);
+		},
+
+		onTabHome: function () {
+			// Leaving in the middle of an edit throws the unsaved changes away
+			if (this.getOwnerComponent().getModel("view").getProperty("/edit")) {
+				this.onCancel();
+			}
+			this.getOwnerComponent().getRouter().navTo("list");
+		},
+
+		onTabAlerts: function () {
+			this._runOnList("alerts");
+		},
+
+		onAddProduct: function () {
+			this._runOnList("add");
+		},
+
+		onExport: function () {
+			this._runOnList("export");
+		},
+
 		onNavBack: function () {
 			if (this.getOwnerComponent().getModel("view").getProperty("/edit")) {
 				this.onCancel();

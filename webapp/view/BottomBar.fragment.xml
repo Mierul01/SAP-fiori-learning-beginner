@@ -1,0 +1,17 @@
+<!--
+	Bottom menu bar for phones (hidden on wider screens, see "Bottom menu bar" in style.css).
+	Used by ProductList.view.xml and ProductDetail.view.xml; each controller has the
+	onTabHome / onTabAlerts / onAskAi / onAddProduct / onExport handlers.
+-->
+<core:FragmentDefinition
+	xmlns="sap.m"
+	xmlns:core="sap.ui.core">
+	<HBox class="bottomNav" justifyContent="SpaceAround" alignItems="End">
+		<Button text="{i18n>navHome}" icon="sap-icon://home" press=".onTabHome" class="navBtn navHome"/>
+		<Button text="{i18n>navAlerts}" icon="sap-icon://alert" press=".onTabAlerts" class="navBtn"/>
+		<!-- Raised round button in the middle -->
+		<Button text="{i18n>aiAsk}" icon="sap-icon://ai" press=".onAskAi" class="navBtn navAi"/>
+		<Button text="{i18n>navAdd}" icon="sap-icon://add" press=".onAddProduct" class="navBtn"/>
+		<Button text="{i18n>btnExport}" icon="sap-icon://excel-attachment" press=".onExport" class="navBtn"/>
+	</HBox>
+</core:FragmentDefinition>
