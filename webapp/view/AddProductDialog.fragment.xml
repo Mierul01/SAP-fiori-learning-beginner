@@ -4,49 +4,60 @@
 -->
 <core:FragmentDefinition
 	xmlns="sap.m"
-	xmlns:core="sap.ui.core"
-	xmlns:f="sap.ui.layout.form">
+	xmlns:core="sap.ui.core">
 	<Dialog
 		id="addDialog"
 		title="{i18n>addTitle}"
 		icon="sap-icon://add-product"
-		contentWidth="30rem"
+		contentWidth="28rem"
 		class="addDialog">
-		<f:SimpleForm
-			editable="true"
-			layout="ResponsiveGridLayout"
-			labelSpanL="4" labelSpanM="4" labelSpanS="12"
-			columnsL="1" columnsM="1">
-			<f:content>
-				<Label text="{i18n>lblName}" required="true"/>
+		<!-- A simple stacked form: each field is a label with its control under it -->
+		<VBox class="addForm">
+			<VBox class="formField">
+				<Label text="{i18n>lblName}" required="true" labelFor="newName"/>
 				<Input
+					id="newName"
 					value="{view>/newProduct/Name}"
 					valueState="{view>/newProduct/nameState}"
 					valueStateText="{i18n>nameRequired}"
 					placeholder="{i18n>namePlaceholder}"
 					liveChange=".onNewNameChange"/>
+			</VBox>
 
-				<Label text="{i18n>lblCategory}"/>
-				<Select selectedKey="{view>/newProduct/Category}" width="100%">
+			<VBox class="formField">
+				<Label text="{i18n>lblCategory}" labelFor="newCategory"/>
+				<Select id="newCategory" selectedKey="{view>/newProduct/Category}" width="100%">
 					<core:Item key="Laptops" text="Laptops"/>
 					<core:Item key="Monitors" text="Monitors"/>
 					<core:Item key="Accessories" text="Accessories"/>
 					<core:Item key="Printers" text="Printers"/>
 				</Select>
+			</VBox>
 
-				<Label text="{i18n>lblSupplier}"/>
-				<Input value="{view>/newProduct/Supplier}"/>
+			<VBox class="formField">
+				<Label text="{i18n>lblSupplier}" labelFor="newSupplier"/>
+				<Input id="newSupplier" value="{view>/newProduct/Supplier}"/>
+			</VBox>
 
-				<Label text="{i18n>lblPriceRm}"/>
-				<StepInput value="{view>/newProduct/Price}" min="0" max="99999" step="10" width="10rem" textAlign="Center" class="qtyInput"/>
+			<!-- Price and quantity side by side: each stepper only needs a short number -->
+			<HBox class="formRow">
+				<VBox class="formField">
+					<Label text="{i18n>lblPriceRm}" labelFor="newPrice"/>
+					<StepInput id="newPrice" value="{view>/newProduct/Price}" min="0" max="99999" step="10"
+						width="100%" textAlign="Center" class="qtyInput"/>
+				</VBox>
+				<VBox class="formField">
+					<Label text="{i18n>lblQuantity}" labelFor="newStock"/>
+					<StepInput id="newStock" value="{view>/newProduct/Stock}" min="0" max="999"
+						width="100%" textAlign="Center" class="qtyInput"/>
+				</VBox>
+			</HBox>
 
-				<Label text="{i18n>lblQuantity}"/>
-				<StepInput value="{view>/newProduct/Stock}" min="0" max="999" width="10rem" textAlign="Center" class="qtyInput"/>
-
-				<Label text="{i18n>lblDescription}"/>
-				<TextArea value="{view>/newProduct/Description}" rows="3" width="100%"/>
-			</f:content>
-		</f:SimpleForm>
+			<VBox class="formField">
+				<Label text="{i18n>lblDescription}" labelFor="newDescription"/>
+				<TextArea id="newDescription" value="{view>/newProduct/Description}" rows="3" width="100%"/>
+			</VBox>
+		</VBox>
 		<beginButton>
 			<Button text="{i18n>btnSave}" type="Emphasized" press=".onSaveProduct"/>
 		</beginButton>

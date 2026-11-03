@@ -355,10 +355,6 @@ html, body, .sapMPageEnableScrolling, .sapMDialogScroll, .sapMSltPicker * {
 	padding-bottom: 10px;
 }
 
-/* ---------- Dialog ---------- */
-.addDialog .sapMDialogSection {
-	padding: 4px 6px 8px;
-}
 
 /* ---------- Detail page ---------- */
 .detailHero {
@@ -800,7 +796,31 @@ body::before {
 }
 
 /* Price and stock steppers in the Add dialog and edit mode: a bit wider than the order box */
-.addDialog .qtyInput.sapMStepInput,
 .detailPriceBox .qtyInput.sapMStepInput {
 	width: 10rem !important;
+}
+
+/* ---------- Add product form ---------- */
+.addForm {
+	padding: 14px 18px 6px;
+	gap: 12px;
+}
+.formField {
+	gap: 4px;
+	min-width: 0;
+}
+.formField .sapMLabel {
+	color: #556b82;
+	font-size: 0.8125rem;
+}
+/* Two fields sharing one row (price + quantity) */
+.formRow {
+	gap: 12px;
+}
+.formRow > .sapMFlexItem {
+	flex: 1 1 0 !important;
+	min-width: 0 !important;
+}
+.addDialog .formRow .qtyInput.sapMStepInput {
+	width: 100% !important;
 }
