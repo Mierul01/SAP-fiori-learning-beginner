@@ -769,3 +769,38 @@ html, body, .sapMPageEnableScrolling, .sapMDialogScroll, .sapMSltPicker * {
 		max-width: 22px;
 	}
 }
+
+/* ---------- Home-screen app (iPhone): use the whole screen ---------- */
+/*
+	When opened from the home screen, iOS can make "height: 100%" stop above the
+	home bar, leaving a white strip. 100vh is the full screen height there.
+	(UI5 sets height: 100% as an inline style, so !important is needed.)
+*/
+html,
+body,
+.sapUiComponentContainer {
+	height: 100vh !important;
+}
+
+/*
+	Fixed blue strip behind the status bar (time, signal, battery), so the page
+	can scroll underneath without text showing behind the icons.
+	env(safe-area-inset-top) is 0 on desktop, so this only shows on phones.
+*/
+body::before {
+	content: "";
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	height: env(safe-area-inset-top);
+	background: linear-gradient(90deg, #0064d9 0%, #0a4aa8 60%, #163a7a 100%);
+	z-index: 10000;
+	pointer-events: none;
+}
+
+/* Price and stock steppers in the Add dialog and edit mode: a bit wider than the order box */
+.addDialog .qtyInput.sapMStepInput,
+.detailPriceBox .qtyInput.sapMStepInput {
+	width: 10rem !important;
+}

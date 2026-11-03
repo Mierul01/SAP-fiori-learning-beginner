@@ -55,7 +55,7 @@
 						<Text text="{ path: 'Price', formatter: '.formatter.price' }" wrapping="false"
 							visible="{= !${view>/edit} }" class="detailPriceText"/>
 						<Label text="{i18n>lblPriceRm}" visible="{view>/edit}"/>
-						<StepInput value="{Price}" min="0" max="99999" step="10" width="10rem" visible="{view>/edit}"/>
+						<StepInput value="{Price}" min="0" max="99999" step="10" width="10rem" textAlign="Center" visible="{view>/edit}" class="qtyInput"/>
 					</VBox>
 				</HBox>
 
