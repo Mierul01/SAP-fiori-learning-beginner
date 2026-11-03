@@ -64,8 +64,8 @@ sap.ui.define([
 					name: "fiori.beginner.products.view.AiAssistant",
 					controller: this
 				}).then(function (oDialog) {
-					// Full screen on a phone
-					oDialog.setStretch(Device.system.phone);
+					// Full screen on a phone (or any screen narrower than 600px)
+					oDialog.setStretch(Device.system.phone || window.innerWidth < 600);
 					// Gives the dialog the app's models (i18n, view, products)
 					this._oComponent.getRootControl().addDependent(oDialog);
 					return oDialog;
