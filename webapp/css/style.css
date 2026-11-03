@@ -1377,6 +1377,8 @@ html, body, .sapMPageEnableScrolling, .sapMDialogScroll, .sapMSltPicker * {
    ===================================================================== */
 html,
 body {
+	/* never fixed in place: the page itself must scroll */
+	position: static !important;
 	height: auto !important;
 	min-height: 100%;
 	overflow-x: clip;
@@ -1387,7 +1389,7 @@ html {
 }
 .sapUiComponentContainer,
 .sapUiComponentContainer > div,
-.sapMNav.sapMApp {
+.sapMNav {
 	height: auto !important;
 	overflow: visible !important;
 }

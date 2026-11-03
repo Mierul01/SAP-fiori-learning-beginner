@@ -2,6 +2,12 @@
 	xmlns:mvc="sap.ui.core.mvc"
 	xmlns="sap.m"
 	displayBlock="true">
-	<!-- The App is an empty "shell". The router puts the List or Detail page inside it. -->
-	<App id="app"/>
+	<!--
+		An empty "shell": the router puts the List or Detail page inside it.
+		NavContainer instead of sap.m.App: App also changes the page on iPhones
+		(it fixes the page in place to stop native scrolling, and sets its own
+		status bar style). Here the whole page scrolls like a normal website, so
+		the blue header can run behind the status bar and the app reaches the bottom.
+	-->
+	<NavContainer id="app"/>
 </mvc:View>
