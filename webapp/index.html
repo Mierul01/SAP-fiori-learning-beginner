@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8">
-	<!-- viewport-fit=cover lets the app draw under the phone's status bar (full screen) -->
+	<!-- viewport-fit=cover lets the app use the whole screen width and height (safe areas in style.css) -->
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 	<title>Product Catalog - SAP Fiori Beginner</title>
 
@@ -15,7 +15,12 @@
 	<meta name="mobile-web-app-capable" content="yes">
 	<meta name="apple-mobile-web-app-capable" content="yes">
 	<meta name="apple-mobile-web-app-title" content="Catalog">
-	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+	<!--
+		"default" keeps the iPhone status bar (time, battery) above the app.
+		"black-translucent" draws the app under it, but then iOS shows the page one
+		status-bar height too short, leaving a white strip at the bottom.
+	-->
+	<meta name="apple-mobile-web-app-status-bar-style" content="default">
 
 	<!--
 		Step 1: Bootstrap SAPUI5 (the UI library behind SAP Fiori).
@@ -31,39 +36,6 @@
 		data-sap-ui-async="true"
 		data-sap-ui-resource-roots='{ "fiori.beginner.products": "./" }'
 		data-sap-ui-on-init="module:sap/ui/core/ComponentSupport">
-	</script>
-
-	<!-- Phone home-screen helpers (plain JavaScript, no UI5 needed) -->
-	<script>
-		(function () {
-			// 1. iPhone home-screen app: use the real full screen height (see --app-h in style.css)
-			function fitScreen() {
-				if (!window.navigator.standalone) {
-					return;
-				}
-				var bPortrait = window.innerHeight >= window.innerWidth;
-				var iLong = Math.max(screen.width, screen.height);
-				var iShort = Math.min(screen.width, screen.height);
-				var iHeight = Math.max(window.innerHeight, bPortrait ? iLong : iShort);
-				document.documentElement.style.setProperty("--app-h", iHeight + "px");
-				// Lets style.css place fixed things (Ask AI button, chat) against the real screen height
-				document.documentElement.classList.add("isStandalone");
-			}
-			fitScreen();
-			window.addEventListener("resize", fitScreen);
-			window.addEventListener("orientationchange", fitScreen);
-
-			// 2. Show the blue status-bar strip only after the page is scrolled
-			document.addEventListener("scroll", function (oEvent) {
-				var oTarget = oEvent.target;
-				if (oTarget && typeof oTarget.scrollTop === "number" && document.body) {
-					document.body.classList.toggle("isScrolled", oTarget.scrollTop > 8);
-				}
-			}, true);
-			window.addEventListener("hashchange", function () {
-				document.body.classList.remove("isScrolled");
-			});
-		})();
 	</script>
 </head>
 
