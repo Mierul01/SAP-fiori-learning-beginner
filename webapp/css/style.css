@@ -1342,3 +1342,36 @@ html, body, .sapMPageEnableScrolling, .sapMDialogScroll, .sapMSltPicker * {
 .aiBubble > .sapMFlexItem:last-child {
 	align-self: flex-end;
 }
+
+/* Round send / new-chat buttons: icon white (send) and exactly centred in the circle */
+.aiDialog .aiFooter .aiSendBtn .sapMBtnInner,
+.aiDialog .aiFooter .aiRoundBtn .sapMBtnInner {
+	display: flex !important;
+	align-items: center !important;
+	justify-content: center !important;
+	padding: 0 !important;
+}
+.aiDialog .aiFooter .aiSendBtn .sapMBtnInner .sapMBtnIcon,
+.aiDialog .aiFooter .aiRoundBtn .sapMBtnInner .sapMBtnIcon {
+	position: static !important;
+	width: auto !important;
+	margin: 0 !important;
+	line-height: 1 !important;
+	font-size: 1.125rem !important;
+}
+.aiDialog .aiFooter .aiSendBtn .sapMBtnInner .sapMBtnIcon {
+	color: #fff !important;
+	transform: translateX(-1px); /* the paper plane leans right, nudge it to look centred */
+}
+.aiDialog .aiFooter .aiRoundBtn .sapMBtnInner .sapMBtnIcon {
+	color: #5a32d6 !important;
+}
+
+/*
+	iPhone (iOS 26) colours the status bar (time, battery) from the page's root
+	background, not from theme-color. Blue here makes it match the header; the
+	app itself (body) stays white.
+*/
+html {
+	background-color: #0064d9;
+}
