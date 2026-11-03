@@ -1366,3 +1366,69 @@ html, body, .sapMPageEnableScrolling, .sapMDialogScroll, .sapMSltPicker * {
 .aiDialog .aiFooter .aiRoundBtn .sapMBtnInner .sapMBtnIcon {
 	color: #5a32d6 !important;
 }
+
+/* =====================================================================
+   Page scrolls as a whole (like a normal website) instead of UI5's
+   fixed-height page with an inner scroll area. On an iPhone home-screen
+   app with the translucent status bar, "height: 100%" ends one status-bar
+   height short (a white strip at the bottom); a normally scrolling page
+   gets the full screen. UI5 sets some of these as inline styles, so
+   !important is needed.
+   ===================================================================== */
+html,
+body {
+	height: auto !important;
+	min-height: 100%;
+	overflow-x: clip;
+	overflow-y: visible !important;
+}
+html {
+	background-color: #ffffff;
+}
+.sapUiComponentContainer,
+.sapUiComponentContainer > div,
+.sapMNav.sapMApp {
+	height: auto !important;
+	overflow: visible !important;
+}
+/* The page that is shown flows normally; hidden pages stay hidden */
+.sapMNav > .sapMNavItem:not(.sapMNavItemHidden) {
+	position: relative !important;
+	height: auto !important;
+}
+.fioriPage.sapMPage {
+	height: auto !important;
+	overflow: visible !important;
+}
+.fioriPage > .sapMPageEnableScrolling,
+.fioriPage .sapMPageEnableScrolling {
+	position: relative !important;
+	top: auto !important;
+	bottom: auto !important;
+	height: auto !important;
+	overflow: visible !important;
+}
+
+/* Blue strip behind the status bar, only after scrolling (index.html toggles isScrolled) */
+body::before {
+	content: "";
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	height: env(safe-area-inset-top);
+	background: rgba(10, 74, 168, 0.97);
+	z-index: 10000;
+	pointer-events: none;
+	opacity: 0;
+	transition: opacity 0.2s ease;
+}
+body.isScrolled::before {
+	opacity: 1;
+}
+
+/* Full-screen pickers (e.g. the category list) start below the status bar */
+.sapMDialog.sapMDialogStretched:not(.aiDialog) {
+	top: env(safe-area-inset-top) !important;
+	height: calc(100% - env(safe-area-inset-top)) !important;
+}

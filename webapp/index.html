@@ -16,12 +16,12 @@
 	<meta name="apple-mobile-web-app-capable" content="yes">
 	<meta name="apple-mobile-web-app-title" content="Catalog">
 	<!--
-		"black": a black iPhone status bar (white time and battery) above the app,
-		and the app fills the screen down to the bottom.
-		("black-translucent" would put the blue header behind the status bar, but
-		iOS then shows the page one status-bar height short, with a white strip at the bottom.)
+		"black-translucent": the blue header runs behind the iPhone status bar.
+		This only fills the whole screen when the page itself scrolls (like a normal
+		website), so style.css turns off UI5's fixed-height inner scrolling ("Page scrolls
+		as a whole"). With "height: 100%" iOS stops one status-bar height short.
 	-->
-	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
 	<!--
 		Step 1: Bootstrap SAPUI5 (the UI library behind SAP Fiori).
@@ -38,6 +38,18 @@
 		data-sap-ui-resource-roots='{ "fiori.beginner.products": "./" }'
 		data-sap-ui-on-init="module:sap/ui/core/ComponentSupport">
 	</script>
+
+	<script>
+		// The whole page scrolls (see style.css), so:
+		// 1. show the blue strip behind the status bar once the page is scrolled down
+		window.addEventListener("scroll", function () {
+			document.body.classList.toggle("isScrolled", window.scrollY > 8);
+		}, { passive: true });
+		// 2. open every page (list, product) at the top
+		window.addEventListener("hashchange", function () {
+			window.scrollTo(0, 0);
+		});
+	</script>
 </head>
 
 <!-- Step 2: The Component (Component.js) is started inside this div. -->
@@ -46,8 +58,7 @@
 		data-sap-ui-component
 		data-name="fiori.beginner.products"
 		data-id="container"
-		data-settings='{ "id": "products" }'
-		style="height: 100%">
+		data-settings='{ "id": "products" }'>
 	</div>
 </body>
 </html>
