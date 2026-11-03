@@ -1,37 +1,38 @@
 <!--
-	AI Assistant dialog. Opened by controller/AiAssistant.js from the list page
+	AI Assistant chat widget. Opened by controller/AiAssistant.js from the list page
 	("Ask AI" button) and from the product page ("Ask AI about this product").
+	It is a sap.m.Dialog styled as a floating chat card (see "AI chat widget" in style.css).
 -->
 <core:FragmentDefinition
 	xmlns="sap.m"
 	xmlns:core="sap.ui.core">
 	<Dialog
 		id="aiDialog"
-		title="{i18n>aiTitle}"
-		icon="sap-icon://ai"
-		contentWidth="34rem"
-		contentHeight="32rem"
 		resizable="false"
+		draggable="false"
+		afterClose=".onAfterClose"
 		class="aiDialog">
 		<customHeader>
 			<Bar class="aiHeader">
 				<contentLeft>
-					<core:Icon src="sap-icon://ai" class="aiHeaderIcon"/>
+					<!-- Avatar with a green "online" dot -->
+					<HBox class="aiAvatar" alignItems="Center" justifyContent="Center">
+						<core:Icon src="sap-icon://ai" class="aiAvatarIcon"/>
+					</HBox>
 					<VBox class="aiHeaderText" justifyContent="Center">
 						<Title text="{i18n>aiTitle}" level="H2" class="aiHeaderTitle"/>
 						<Text text="{= ${view>/ai/demo} ? ${i18n>aiDemoSub} : ${view>/ai/poweredBy} }" class="aiHeaderSub"/>
 					</VBox>
 				</contentLeft>
 				<contentRight>
-					<Button icon="sap-icon://refresh" type="Transparent" tooltip="{i18n>aiClear}"
-						press=".onClear" visible="{= ${view>/ai/ready} &amp;&amp; ${view>/ai/messages}.length > 0 }" class="aiHeaderBtn"/>
 					<Button icon="sap-icon://key" type="Transparent" tooltip="{i18n>aiForgetKey}"
 						press=".onForgetKey" visible="{view>/ai/hasKey}" class="aiHeaderBtn"/>
 					<!-- In demo mode: go back to the key screen to connect a real AI -->
 					<Button icon="sap-icon://connected" type="Transparent" tooltip="{i18n>aiConnect}"
 						press=".onExitDemo" visible="{view>/ai/demo}" class="aiHeaderBtn"/>
-					<Button icon="sap-icon://decline" type="Transparent" tooltip="{i18n>btnClose}"
-						press=".onClose" class="aiHeaderBtn"/>
+					<!-- Minimise: closes the card, the chat is kept -->
+					<Button icon="sap-icon://slim-arrow-down" tooltip="{i18n>aiMinimise}"
+						press=".onClose" class="aiHeaderBtn aiMinBtn"/>
 				</contentRight>
 			</Bar>
 		</customHeader>
@@ -82,16 +83,31 @@
 
 		<!-- 2. The chat -->
 		<VBox class="aiChat" visible="{view>/ai/ready}">
-			<!-- Empty state: suggestion chips -->
-			<VBox class="aiWelcome" visible="{= ${view>/ai/messages}.length === 0 }">
-				<Text text="{i18n>aiWelcome}" class="aiWelcomeText"/>
-				<HBox class="aiChips" wrap="Wrap">
-					<Button text="{i18n>aiChip1}" icon="sap-icon://cart" press=".onChip" class="aiChip"/>
-					<Button text="{i18n>aiChip2}" icon="sap-icon://business-objects-experience" press=".onChip" class="aiChip"/>
-					<Button text="{i18n>aiChip3}" icon="sap-icon://lead" press=".onChip" class="aiChip"/>
-					<Button text="{i18n>aiChip4}" icon="sap-icon://lightbulb" press=".onChip" class="aiChip"/>
-				</HBox>
-			</VBox>
+			<HBox justifyContent="Center">
+				<Text text="{i18n>aiToday}" class="aiDayPill"/>
+			</HBox>
+
+			<!-- Welcome messages from the assistant -->
+			<HBox class="aiRow">
+				<VBox class="aiBubble">
+					<Text text="{i18n>aiWelcome1}" class="aiBubbleText"/>
+					<Text text="{view>/ai/welcomeTime}" class="aiTime"/>
+				</VBox>
+			</HBox>
+			<HBox class="aiRow">
+				<VBox class="aiBubble">
+					<Text text="{i18n>aiWelcome2}" class="aiBubbleText"/>
+					<Text text="{view>/ai/welcomeTime}" class="aiTime"/>
+				</VBox>
+			</HBox>
+
+			<!-- Suggestion chips: stay visible until the first question -->
+			<HBox class="aiChips" wrap="Wrap" visible="{= ${view>/ai/messages}.length === 0 }">
+				<Button text="{i18n>aiChip1}" icon="sap-icon://cart" press=".onChip" class="aiChip"/>
+				<Button text="{i18n>aiChip2}" icon="sap-icon://business-objects-experience" press=".onChip" class="aiChip"/>
+				<Button text="{i18n>aiChip3}" icon="sap-icon://lead" press=".onChip" class="aiChip"/>
+				<Button text="{i18n>aiChip4}" icon="sap-icon://lightbulb" press=".onChip" class="aiChip"/>
+			</HBox>
 
 			<!-- Messages: one bubble per message -->
 			<VBox items="{view>/ai/messages}" class="aiMessages">
@@ -100,7 +116,10 @@
 					<customData>
 						<core:CustomData key="role" value="{view>role}" writeToDom="true"/>
 					</customData>
-					<FormattedText htmlText="{view>html}" class="aiBubble"/>
+					<VBox class="aiBubble">
+						<FormattedText htmlText="{view>html}" class="aiBubbleText"/>
+						<Text text="{view>time}" class="aiTime"/>
+					</VBox>
 				</HBox>
 			</VBox>
 		</VBox>
@@ -108,19 +127,21 @@
 		<!-- Message box at the bottom -->
 		<footer>
 			<Toolbar visible="{view>/ai/ready}" class="aiFooter">
+				<Button icon="sap-icon://refresh" tooltip="{i18n>aiClear}" press=".onClear" class="aiRoundBtn"/>
 				<Input
 					id="aiInput"
 					value="{view>/ai/input}"
 					placeholder="{i18n>aiPlaceholder}"
 					submit=".onSend"
 					enabled="{= !${view>/ai/busy} }"
-					width="100%">
+					width="100%"
+					class="aiInputPill">
 					<layoutData>
 						<ToolbarLayoutData shrinkable="true"/>
 					</layoutData>
 				</Input>
-				<Button icon="sap-icon://paper-plane" type="Emphasized" tooltip="{i18n>aiSend}"
-					press=".onSend" enabled="{= !${view>/ai/busy} }"/>
+				<Button icon="sap-icon://paper-plane" tooltip="{i18n>aiSend}"
+					press=".onSend" enabled="{= !${view>/ai/busy} }" class="aiSendBtn"/>
 			</Toolbar>
 		</footer>
 	</Dialog>

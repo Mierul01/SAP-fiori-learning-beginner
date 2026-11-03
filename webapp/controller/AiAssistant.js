@@ -1,11 +1,10 @@
 sap.ui.define([
 	"sap/ui/base/Object",
 	"sap/ui/core/Fragment",
-	"sap/ui/Device",
 	"sap/m/MessageToast",
 	"../model/ai",
 	"../model/aiDemo"
-], function (BaseObject, Fragment, Device, MessageToast, ai, aiDemo) {
+], function (BaseObject, Fragment, MessageToast, ai, aiDemo) {
 	"use strict";
 
 	/*
@@ -72,6 +71,9 @@ sap.ui.define([
 		 */
 		open: function (sQuestion) {
 			this._setMode(!this._bShowKeyScreen);
+			if (!this._view().getProperty("/ai/messages").length) {
+				this._view().setProperty("/ai/welcomeTime", this._now());
+			}
 
 			if (!this._pDialog) {
 				this._pDialog = Fragment.load({
@@ -79,8 +81,6 @@ sap.ui.define([
 					name: "fiori.beginner.products.view.AiAssistant",
 					controller: this
 				}).then(function (oDialog) {
-					// Full screen on a phone (or any screen narrower than 600px)
-					oDialog.setStretch(Device.system.phone || window.innerWidth < 600);
 					// Gives the dialog the app's models (i18n, view, products)
 					this._oComponent.getRootControl().addDependent(oDialog);
 					return oDialog;
@@ -88,11 +88,23 @@ sap.ui.define([
 			}
 
 			this._pDialog.then(function (oDialog) {
+				// Lightens the page behind the chat card (style.css)
+				document.body.classList.add("aiChatOpen");
 				oDialog.open();
 				if (sQuestion && this.isReady()) {
 					this.ask(sQuestion);
 				}
 			}.bind(this));
+		},
+
+		onAfterClose: function () {
+			document.body.classList.remove("aiChatOpen");
+		},
+
+		// "12:05" for the time under each message
+		_now: function () {
+			var d = new Date();
+			return ("0" + d.getHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2);
 		},
 
 		onClose: function () {
@@ -177,8 +189,8 @@ sap.ui.define([
 			var bDemo = oVM.getProperty("/ai/demo");
 
 			var aMessages = oVM.getProperty("/ai/messages").concat([
-				{ role: "user", text: sQuestion, html: ai.toHtml(sQuestion) },
-				{ role: "assistant", text: "", html: "<p class=\"aiTyping\">" + this._getText("aiThinking") + "</p>" }
+				{ role: "user", text: sQuestion, html: ai.toHtml(sQuestion), time: this._now() },
+				{ role: "assistant", text: "", html: "<p class=\"aiTyping\">" + this._getText("aiThinking") + "</p>", time: this._now() }
 			]);
 			var iAnswer = aMessages.length - 1;
 			oVM.setProperty("/ai/messages", aMessages);

@@ -27,7 +27,7 @@ sap.ui.define([
 				newProduct: {},
 				// AI Assistant chat state
 				ai: {
-					hasKey: false, demo: false, ready: false, poweredBy: "",
+					hasKey: false, demo: false, ready: false, poweredBy: "", welcomeTime: "",
 					input: "", busy: false, messages: [], writing: false,
 					// Key screen: provider, key, optional model and the hints for that provider
 					setup: { provider: "", key: "", model: "", keyHint: "", defaultModel: "", keyUrl: "" }
