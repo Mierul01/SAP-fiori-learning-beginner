@@ -126,8 +126,6 @@
 				</HBox>
 			</VBox>
 
-			<!-- Phone bottom menu bar -->
-			<core:Fragment fragmentName="fiori.beginner.products.view.BottomBar" type="XML"/>
 		</content>
 	</Page>
 </mvc:View>

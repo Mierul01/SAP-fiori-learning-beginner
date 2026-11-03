@@ -3,7 +3,7 @@
 	xmlns:mvc="sap.ui.core.mvc"
 	xmlns:core="sap.ui.core"
 	xmlns="sap.m">
-	<Page showHeader="false" class="fioriPage listPage">
+	<Page showHeader="false" class="fioriPage">
 		<content>
 			<!-- 1. Hero header: title and the main actions -->
 			<VBox class="hero">
@@ -188,10 +188,8 @@
 				</VBox>
 			</VBox>
 
-			<!-- Phone bottom menu bar -->
-			<core:Fragment fragmentName="fiori.beginner.products.view.BottomBar" type="XML"/>
 
-			<!-- Floating AI button (wider screens): opens the AI Assistant (controller/AiAssistant.js) -->
+			<!-- Floating AI button: opens the AI Assistant (controller/AiAssistant.js) -->
 			<Button text="{i18n>aiAsk}" icon="sap-icon://ai" press=".onAskAi" class="aiFab"/>
 		</content>
 	</Page>
