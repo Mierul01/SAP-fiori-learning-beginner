@@ -768,19 +768,20 @@ html, body, .sapMPageEnableScrolling, .sapMDialogScroll, .sapMSltPicker * {
 
 /* ---------- Home-screen app (iPhone): use the whole screen ---------- */
 /*
-	When opened from the home screen, iOS can make "height: 100%" stop above the
-	home bar, leaving a white strip. 100vh is the full screen height there.
+	--app-h is set by the small script in index.html. On an iPhone home-screen app,
+	"height: 100%" stops short of the bottom by the height of the status bar, so the
+	script measures the real screen height. Everywhere else it stays 100%.
 	(UI5 sets height: 100% as an inline style, so !important is needed.)
 */
 html,
 body,
 .sapUiComponentContainer {
-	height: 100vh !important;
+	height: var(--app-h, 100%) !important;
 }
 
 /*
-	Fixed blue strip behind the status bar (time, signal, battery), so the page
-	can scroll underneath without text showing behind the icons.
+	Blue strip behind the status bar (time, signal, battery). It only fades in
+	after you scroll, so at the top the header looks like one clean piece.
 	env(safe-area-inset-top) is 0 on desktop, so this only shows on phones.
 */
 body::before {
@@ -790,9 +791,15 @@ body::before {
 	left: 0;
 	right: 0;
 	height: env(safe-area-inset-top);
-	background: linear-gradient(90deg, #0064d9 0%, #0a4aa8 60%, #163a7a 100%);
+	background: rgba(10, 74, 168, 0.97);
+	box-shadow: 0 1px 8px rgba(16, 38, 76, 0.18);
 	z-index: 10000;
 	pointer-events: none;
+	opacity: 0;
+	transition: opacity 0.2s ease;
+}
+body.isScrolled::before {
+	opacity: 1;
 }
 
 /* Price and stock steppers in the Add dialog and edit mode: a bit wider than the order box */

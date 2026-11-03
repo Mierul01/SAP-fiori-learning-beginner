@@ -32,6 +32,37 @@
 		data-sap-ui-resource-roots='{ "fiori.beginner.products": "./" }'
 		data-sap-ui-on-init="module:sap/ui/core/ComponentSupport">
 	</script>
+
+	<!-- Phone home-screen helpers (plain JavaScript, no UI5 needed) -->
+	<script>
+		(function () {
+			// 1. iPhone home-screen app: use the real full screen height (see --app-h in style.css)
+			function fitScreen() {
+				if (!window.navigator.standalone) {
+					return;
+				}
+				var bPortrait = window.innerHeight >= window.innerWidth;
+				var iLong = Math.max(screen.width, screen.height);
+				var iShort = Math.min(screen.width, screen.height);
+				var iHeight = Math.max(window.innerHeight, bPortrait ? iLong : iShort);
+				document.documentElement.style.setProperty("--app-h", iHeight + "px");
+			}
+			fitScreen();
+			window.addEventListener("resize", fitScreen);
+			window.addEventListener("orientationchange", fitScreen);
+
+			// 2. Show the blue status-bar strip only after the page is scrolled
+			document.addEventListener("scroll", function (oEvent) {
+				var oTarget = oEvent.target;
+				if (oTarget && typeof oTarget.scrollTop === "number" && document.body) {
+					document.body.classList.toggle("isScrolled", oTarget.scrollTop > 8);
+				}
+			}, true);
+			window.addEventListener("hashchange", function () {
+				document.body.classList.remove("isScrolled");
+			});
+		})();
+	</script>
 </head>
 
 <!-- Step 2: The Component (Component.js) is started inside this div. -->
