@@ -1,0 +1,7 @@
+<mvc:View
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns="sap.m"
+	displayBlock="true">
+	<!-- The App is an empty "shell". The router puts the List or Detail page inside it. -->
+	<App id="app"/>
+</mvc:View>

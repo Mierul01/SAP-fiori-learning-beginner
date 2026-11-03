@@ -1,0 +1,8 @@
+{
+  "name": "sap-fiori-beginner",
+  "version": "1.0.0",
+  "description": "A simple beginner SAP Fiori (SAPUI5) app: product list with search, filter, paging and a detail page",
+  "scripts": {
+    "start": "node server.js"
+  }
+}

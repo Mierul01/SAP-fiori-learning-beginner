@@ -1,0 +1,57 @@
+<!--
+	A Fragment is a reusable piece of UI without its own controller.
+	This one is opened by ProductList.controller.js (onAddProduct).
+-->
+<core:FragmentDefinition
+	xmlns="sap.m"
+	xmlns:core="sap.ui.core"
+	xmlns:f="sap.ui.layout.form">
+	<Dialog
+		id="addDialog"
+		title="{i18n>addTitle}"
+		icon="sap-icon://add-product"
+		contentWidth="30rem"
+		class="addDialog">
+		<f:SimpleForm
+			editable="true"
+			layout="ResponsiveGridLayout"
+			labelSpanL="4" labelSpanM="4" labelSpanS="12"
+			columnsL="1" columnsM="1">
+			<f:content>
+				<Label text="{i18n>lblName}" required="true"/>
+				<Input
+					value="{view>/newProduct/Name}"
+					valueState="{view>/newProduct/nameState}"
+					valueStateText="{i18n>nameRequired}"
+					placeholder="{i18n>namePlaceholder}"
+					liveChange=".onNewNameChange"/>
+
+				<Label text="{i18n>lblCategory}"/>
+				<Select selectedKey="{view>/newProduct/Category}" width="100%">
+					<core:Item key="Laptops" text="Laptops"/>
+					<core:Item key="Monitors" text="Monitors"/>
+					<core:Item key="Accessories" text="Accessories"/>
+					<core:Item key="Printers" text="Printers"/>
+				</Select>
+
+				<Label text="{i18n>lblSupplier}"/>
+				<Input value="{view>/newProduct/Supplier}"/>
+
+				<Label text="{i18n>lblPriceRm}"/>
+				<StepInput value="{view>/newProduct/Price}" min="0" max="99999" step="10"/>
+
+				<Label text="{i18n>lblQuantity}"/>
+				<StepInput value="{view>/newProduct/Stock}" min="0" max="999"/>
+
+				<Label text="{i18n>lblDescription}"/>
+				<TextArea value="{view>/newProduct/Description}" rows="3" width="100%"/>
+			</f:content>
+		</f:SimpleForm>
+		<beginButton>
+			<Button text="{i18n>btnSave}" type="Emphasized" press=".onSaveProduct"/>
+		</beginButton>
+		<endButton>
+			<Button text="{i18n>btnCancel}" press=".onCancelAdd"/>
+		</endButton>
+	</Dialog>
+</core:FragmentDefinition>

@@ -1,0 +1,180 @@
+<mvc:View
+	controllerName="fiori.beginner.products.controller.ProductList"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns:core="sap.ui.core"
+	xmlns="sap.m">
+	<Page showHeader="false" class="fioriPage">
+		<content>
+			<!-- 1. Hero header: title and the main actions -->
+			<VBox class="hero">
+				<HBox class="heroInner" justifyContent="SpaceBetween" alignItems="Center" wrap="Wrap">
+					<VBox>
+						<Text text="{i18n>heroEyebrow}" class="heroEyebrow"/>
+						<Title text="{i18n>appTitle}" level="H1" class="heroTitle"/>
+						<Text text="{i18n>heroSubtitle}" class="heroSubtitle"/>
+					</VBox>
+					<HBox class="heroActions">
+						<Button text="{i18n>btnExport}" icon="sap-icon://excel-attachment" press=".onExport" class="heroBtn"/>
+						<Button text="{i18n>btnAdd}" icon="sap-icon://add" press=".onAddProduct" class="heroBtnPrimary"/>
+					</HBox>
+				</HBox>
+			</VBox>
+
+			<VBox class="pageBody">
+				<!--
+					2. Stat strip: ONE sheet with four cells and thin dividers.
+					Each cell has an icon, a number and a mini chart.
+					Click a stock cell to filter the table (see onInit in the controller).
+				-->
+				<HBox class="sheet statSheet">
+					<HBox id="statValue" class="stat statBlue" alignItems="Center">
+						<core:Icon src="sap-icon://lead" class="statIcon"/>
+						<VBox class="statText">
+							<Text text="{i18n>statValue}" class="statLabel"/>
+							<Text text="{view>/kpi/valueText}" class="statValue"/>
+							<Text text="{view>/kpi/valueSub}" class="statSub"/>
+						</VBox>
+						<core:HTML content="{ path: 'view>/kpi/catBars', formatter: '.formatter.miniBars' }"/>
+					</HBox>
+					<HBox id="statOk" class="stat statGreen statClickable" alignItems="Center">
+						<core:Icon src="sap-icon://accept" class="statIcon"/>
+						<VBox class="statText">
+							<Text text="{i18n>stockOk}" class="statLabel"/>
+							<Text text="{view>/kpi/ok}" class="statValue"/>
+							<Text text="{i18n>statHint}" class="statSub"/>
+						</VBox>
+						<core:HTML content="{ path: 'view>/kpi/okPct', formatter: '.formatter.ring' }"/>
+					</HBox>
+					<HBox id="statLow" class="stat statOrange statClickable" alignItems="Center">
+						<core:Icon src="sap-icon://warning2" class="statIcon"/>
+						<VBox class="statText">
+							<Text text="{i18n>stockLow}" class="statLabel"/>
+							<Text text="{view>/kpi/low}" class="statValue"/>
+							<Text text="{i18n>statHint}" class="statSub"/>
+						</VBox>
+						<core:HTML content="{ path: 'view>/kpi/lowPct', formatter: '.formatter.ring' }"/>
+					</HBox>
+					<HBox id="statOut" class="stat statRed statClickable" alignItems="Center">
+						<core:Icon src="sap-icon://error" class="statIcon"/>
+						<VBox class="statText">
+							<Text text="{i18n>stockOut}" class="statLabel"/>
+							<Text text="{view>/kpi/out}" class="statValue"/>
+							<Text text="{i18n>statHint}" class="statSub"/>
+						</VBox>
+						<core:HTML content="{ path: 'view>/kpi/outPct', formatter: '.formatter.ring' }"/>
+					</HBox>
+				</HBox>
+
+				<!--
+					3. The product table.
+					items="{/Products}" is DATA BINDING: one row per product in the JSON model.
+					The controller re-binds it with startIndex + length to show 10 rows per page.
+				-->
+				<VBox class="sheet tableSheet">
+					<Table
+						id="productTable"
+						items="{
+							path: '/Products',
+							sorter: { path: 'Name' }
+						}"
+						backgroundDesign="Transparent"
+						noDataText="{i18n>noData}"
+						updateFinished=".onUpdateFinished"
+						class="productTable">
+						<headerToolbar>
+							<OverflowToolbar>
+								<Title text="{view>/listTitle}" level="H2"/>
+								<ToolbarSpacer/>
+								<SearchField
+									id="searchField"
+									width="15rem"
+									placeholder="{i18n>searchPlaceholder}"
+									liveChange=".onFilterChange"/>
+								<Select id="categorySelect" change=".onFilterChange" width="10rem">
+									<core:Item key="" text="{i18n>allCategories}"/>
+									<core:Item key="Laptops" text="Laptops"/>
+									<core:Item key="Monitors" text="Monitors"/>
+									<core:Item key="Accessories" text="Accessories"/>
+									<core:Item key="Printers" text="Printers"/>
+								</Select>
+								<Select id="sortSelect" change=".onSortChange" width="11rem" icon="sap-icon://sort">
+									<core:Item key="name" text="{i18n>sortName}"/>
+									<core:Item key="priceAsc" text="{i18n>sortPriceAsc}"/>
+									<core:Item key="priceDesc" text="{i18n>sortPriceDesc}"/>
+									<core:Item key="stockAsc" text="{i18n>sortStockAsc}"/>
+								</Select>
+							</OverflowToolbar>
+						</headerToolbar>
+
+						<!-- Info bar: only visible while a filter is on -->
+						<infoToolbar>
+							<OverflowToolbar visible="{view>/filterActive}" class="filterInfo">
+								<core:Icon src="sap-icon://filter"/>
+								<Text text="{view>/filterText}"/>
+								<ToolbarSpacer/>
+								<Button text="{i18n>btnClear}" icon="sap-icon://decline" type="Transparent" press=".onClearFilters"/>
+							</OverflowToolbar>
+						</infoToolbar>
+
+						<columns>
+							<!-- Fixed widths keep short columns tight; Product and Description share the rest -->
+							<Column width="15rem">
+								<Text text="{i18n>colProduct}"/>
+							</Column>
+							<Column minScreenWidth="Desktop" demandPopin="false">
+								<Text text="{i18n>lblDescription}"/>
+							</Column>
+							<Column minScreenWidth="Tablet" demandPopin="true" popinDisplay="WithoutHeader" width="8rem">
+								<Text text="{i18n>colCategory}"/>
+							</Column>
+							<Column minScreenWidth="Desktop" demandPopin="false" width="10rem">
+								<Text text="{i18n>colSupplier}"/>
+							</Column>
+							<Column minScreenWidth="Tablet" demandPopin="true" popinDisplay="WithoutHeader" width="9.5rem">
+								<Text text="{i18n>colStock}"/>
+							</Column>
+							<Column hAlign="End" minScreenWidth="Tablet" demandPopin="true" popinDisplay="WithoutHeader" width="8.5rem">
+								<Text text="{i18n>colPrice}"/>
+							</Column>
+						</columns>
+
+						<items>
+							<ColumnListItem type="Navigation" press=".onItemPress" vAlign="Middle">
+								<cells>
+									<!-- Avatar with a category icon + name and ID -->
+									<HBox class="productCell" alignItems="Center">
+										<Avatar
+											src="{ path: 'Category', formatter: '.formatter.categoryIcon' }"
+											backgroundColor="{ path: 'Category', formatter: '.formatter.categoryColor' }"
+											displaySize="XS"
+											displayShape="Square"
+											class="productAvatar"/>
+										<ObjectIdentifier title="{Name}" text="{ProductID}"/>
+									</HBox>
+									<Text text="{Description}" maxLines="2" class="mutedText"/>
+									<Text text="{Category}"/>
+									<Text text="{Supplier}"/>
+									<!-- Stock: status, units and a mini shelf bar (built in formatter.stockMeter) -->
+									<core:HTML content="{ path: 'Stock', formatter: '.formatter.stockMeter' }"/>
+									<Text text="{ path: 'Price', formatter: '.formatter.price' }" class="priceText" wrapping="false"/>
+								</cells>
+							</ColumnListItem>
+						</items>
+					</Table>
+
+					<!-- Pager: "Showing 1-10 of 20" and previous / next buttons -->
+					<HBox class="pager" justifyContent="SpaceBetween" alignItems="Center" visible="{= ${view>/pager/total} > 0 }">
+						<Text text="{view>/pager/text}" class="mutedText"/>
+						<HBox class="pagerNav" alignItems="Center">
+							<Button icon="sap-icon://slim-arrow-left" type="Transparent" tooltip="{i18n>pagePrev}"
+								enabled="{= ${view>/pager/page} > 1 }" press=".onPrevPage"/>
+							<Text text="{view>/pager/pageText}" class="pagerPage"/>
+							<Button icon="sap-icon://slim-arrow-right" type="Transparent" tooltip="{i18n>pageNext}"
+								enabled="{= ${view>/pager/page} &lt; ${view>/pager/pages} }" press=".onNextPage"/>
+						</HBox>
+					</HBox>
+				</VBox>
+			</VBox>
+		</content>
+	</Page>
+</mvc:View>

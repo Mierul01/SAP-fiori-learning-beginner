@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Product Catalog - SAP Fiori Beginner</title>
+
+	<!-- App icon: browser tab, and "Add to Home Screen" on phones -->
+	<link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+	<link rel="icon" href="icons/favicon-32.png" sizes="32x32" type="image/png">
+	<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+	<link rel="manifest" href="manifest.webmanifest">
+	<meta name="theme-color" content="#0a4aa8">
+	<meta name="mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-title" content="Catalog">
+	<meta name="apple-mobile-web-app-status-bar-style" content="default">
+
+	<!--
+		Step 1: Bootstrap SAPUI5 (the UI library behind SAP Fiori).
+		We load OpenUI5 (the free, open-source version) from SAP's CDN,
+		so no install is needed.
+	-->
+	<script
+		id="sap-ui-bootstrap"
+		src="https://sdk.openui5.org/1.148.0/resources/sap-ui-core.js"
+		data-sap-ui-theme="sap_horizon"
+		data-sap-ui-libs="sap.m"
+		data-sap-ui-compat-version="edge"
+		data-sap-ui-async="true"
+		data-sap-ui-resource-roots='{ "fiori.beginner.products": "./" }'
+		data-sap-ui-on-init="module:sap/ui/core/ComponentSupport">
+	</script>
+</head>
+
+<!-- Step 2: The Component (Component.js) is started inside this div. -->
+<body class="sapUiBody" id="content">
+	<div
+		data-sap-ui-component
+		data-name="fiori.beginner.products"
+		data-id="container"
+		data-settings='{ "id": "products" }'
+		style="height: 100%">
+	</div>
+</body>
+</html>

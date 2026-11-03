@@ -1,0 +1,573 @@
+/*
+	Custom styles for the app (light SAP Horizon theme, white background).
+*/
+
+/* ---------- Hide scrollbars (the page still scrolls) ---------- */
+html, body, .sapMPageEnableScrolling, .sapMDialogScroll, .sapMSltPicker * {
+	scrollbar-width: none;
+	-ms-overflow-style: none;
+}
+::-webkit-scrollbar {
+	width: 0;
+	height: 0;
+	display: none;
+}
+
+/* ---------- Page and hero header ---------- */
+.sapUiBody,
+.fioriPage,
+.fioriPage .sapMPageEnableScrolling {
+	background: #ffffff;
+}
+
+.hero {
+	/* Soft decorative circles drawn as backgrounds, so nothing sticks out of the header */
+	background:
+		radial-gradient(circle at calc(100% - 70px) -10px, rgba(255, 255, 255, 0.08) 0 130px, transparent 131px),
+		radial-gradient(circle at calc(100% - 300px) 110px, rgba(255, 255, 255, 0.06) 0 80px, transparent 81px),
+		linear-gradient(120deg, #0064d9 0%, #0a4aa8 60%, #163a7a 100%);
+	padding: 16px 14px 50px;
+}
+
+.heroInner {
+	width: 100%;
+	gap: 12px;
+	position: relative;
+	z-index: 1;
+}
+
+.heroLeft {
+	gap: 12px;
+}
+
+.heroActions {
+	gap: 8px;
+}
+
+.heroEyebrow.sapMText {
+	color: rgba(255, 255, 255, 0.75);
+	font-size: 0.6875rem;
+	font-weight: 700;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+}
+
+.heroTitle.sapMTitle {
+	color: #fff;
+	font-size: 1.5rem;
+	font-weight: 700;
+	margin: 2px 0;
+}
+
+.heroSubtitle.sapMText {
+	color: rgba(255, 255, 255, 0.85);
+	font-size: 0.875rem;
+}
+
+/* Glassy buttons on the blue header */
+.heroBtn .sapMBtnInner {
+	background: rgba(255, 255, 255, 0.14);
+	border: 1px solid rgba(255, 255, 255, 0.32);
+	color: #fff;
+}
+.heroBtn .sapMBtnInner .sapMBtnIcon,
+.heroBtn .sapMBtnInner .sapMBtnContent {
+	color: #fff;
+}
+.heroBtn:hover .sapMBtnInner {
+	background: rgba(255, 255, 255, 0.26);
+}
+
+/* Solid white main action on the blue header */
+.heroBtnPrimary .sapMBtnInner {
+	background: #fff;
+	border: 1px solid #fff;
+}
+.heroBtnPrimary .sapMBtnInner .sapMBtnIcon,
+.heroBtnPrimary .sapMBtnInner .sapMBtnContent {
+	color: #0a4aa8;
+	font-weight: 700;
+}
+.heroBtnPrimary:hover .sapMBtnInner {
+	background: #eaf2ff;
+}
+
+/* Content pulls up over the hero for a layered look */
+.pageBody {
+	margin-top: -36px;
+	padding: 0 14px 14px;
+	gap: 12px;
+	box-sizing: border-box;
+	position: relative;
+	z-index: 2;
+}
+
+/* ---------- Sheets (white panels) ---------- */
+.sheet {
+	background: #fff;
+	border: 1px solid #e3e8ef;
+	border-radius: 14px;
+	box-shadow: 0 6px 18px rgba(16, 38, 76, 0.07);
+	overflow: hidden;
+}
+
+.sheetBody {
+	padding: 14px 18px 16px;
+	gap: 2px;
+}
+
+.sheetTitle.sapMTitle {
+	font-size: 0.9375rem;
+	font-weight: 700;
+	color: #1d2d3e;
+	margin-bottom: 4px;
+}
+
+/* ---------- Stat strip: one sheet, four cells with thin dividers ---------- */
+.statSheet.sapMFlexBox {
+	display: grid;
+	grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.stat {
+	--c: #0070f2;
+	--tint: #e8f1fe;
+	padding: 12px 16px;
+	gap: 12px;
+	border-left: 1px solid #edf1f5;
+	position: relative;
+	transition: background 0.15s ease;
+}
+.stat:first-child {
+	border-left: none;
+}
+.statClickable {
+	cursor: pointer;
+}
+.statClickable:hover {
+	background: #f7f9fc;
+}
+/* Coloured underline on the active filter */
+.stat::after {
+	content: "";
+	position: absolute;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	height: 3px;
+	background: var(--c);
+	transform: scaleX(0);
+	transition: transform 0.2s ease;
+}
+.statActive {
+	background: var(--tint);
+}
+.statActive:hover {
+	background: var(--tint);
+}
+.statActive::after {
+	transform: scaleX(1);
+}
+
+.statBlue   { --c: #0070f2; --tint: #eef5ff; }
+.statGreen  { --c: #188918; --tint: #effaef; }
+.statOrange { --c: #e76500; --tint: #fff4ea; }
+.statRed    { --c: #d32030; --tint: #fff0f1; }
+
+.statIcon.sapUiIcon {
+	width: 34px;
+	height: 34px;
+	line-height: 34px;
+	min-width: 34px;
+	border-radius: 10px;
+	font-size: 1rem;
+	color: var(--c);
+	background: var(--tint);
+}
+.statActive .statIcon.sapUiIcon {
+	background: #fff;
+}
+
+.statText {
+	flex: 1;
+	min-width: 0;
+}
+
+.statLabel.sapMText {
+	font-size: 0.75rem;
+	font-weight: 600;
+	color: #556b82;
+}
+
+.statValue.sapMText {
+	font-size: 1.25rem;
+	font-weight: 700;
+	color: #1d2d3e;
+	line-height: 1.3;
+}
+
+.statSub.sapMText {
+	font-size: 0.6875rem;
+	color: #7a8a9c;
+}
+
+/* Mini donut ring (percentage) */
+.ring {
+	--p: 0;
+	width: 40px;
+	height: 40px;
+	border-radius: 50%;
+	background: conic-gradient(var(--c) calc(var(--p) * 1%), #e9edf2 0);
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-shrink: 0;
+}
+.ring::before {
+	content: "";
+	position: absolute;
+	inset: 5px;
+	border-radius: 50%;
+	background: #fff;
+}
+.statActive .ring::before {
+	background: var(--tint);
+}
+.ring span {
+	position: relative;
+	font-size: 0.625rem;
+	font-weight: 700;
+	color: #1d2d3e;
+}
+
+/* Mini bar chart (value per category) */
+.miniBars {
+	display: flex;
+	align-items: flex-end;
+	gap: 4px;
+	height: 36px;
+	flex-shrink: 0;
+}
+.miniBars i {
+	display: block;
+	width: 7px;
+	border-radius: 2px;
+	background: var(--c);
+}
+.miniBars i:nth-child(2) { opacity: 0.8; }
+.miniBars i:nth-child(3) { opacity: 0.6; }
+.miniBars i:nth-child(4) { opacity: 0.45; }
+
+/* ---------- Product table ---------- */
+.tableSheet {
+	padding: 2px 4px 10px;
+}
+
+.tableSheet .sapMTB.sapMTBHeader-CTX {
+	background: transparent;
+	border-bottom: 1px solid #edf1f5;
+	padding: 0 12px;
+	height: 3.5rem;
+}
+
+/* Pager under the table: one slim row */
+.tableSheet {
+	padding-bottom: 0;
+}
+.pager {
+	padding: 8px 16px 10px;
+	border-top: 1px solid #edf1f5;
+	gap: 12px;
+}
+.pagerNav {
+	gap: 2px;
+}
+.pagerPage.sapMText {
+	font-size: 0.8125rem;
+	font-weight: 600;
+	color: #1d2d3e;
+	padding: 0 6px;
+	white-space: nowrap;
+}
+
+/* "Filtered by" info bar */
+.filterInfo.sapMTB {
+	background: #eef5ff;
+	border-radius: 8px;
+	margin: 8px 10px 4px;
+	padding: 0 6px 0 12px;
+	height: 2.25rem;
+	border: none;
+}
+.filterInfo .sapMText,
+.filterInfo .sapUiIcon {
+	color: #0a4aa8;
+	font-weight: 600;
+}
+
+.productTable,
+.productTable .sapMListTblHeader,
+.productTable .sapMListTblHeaderCell,
+.productTable .sapMLIB {
+	background: transparent;
+}
+
+.productTable .sapMListTblHeaderCell {
+	color: #556b82;
+	font-size: 0.75rem;
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: 0.03em;
+}
+
+.productTable .sapMListTblRow:hover {
+	background: #f7f9fc;
+}
+
+.productCell {
+	gap: 12px;
+	padding: 4px 0;
+}
+
+.productAvatar.sapFAvatar {
+	border-radius: 10px;
+}
+
+.productCell .sapMObjectIdentifierTitle,
+.productCell .sapMObjectIdentifierTitle .sapMText {
+	word-break: normal;
+	overflow-wrap: normal;
+}
+
+.stockCell {
+	gap: 2px;
+}
+
+.stockBadge .sapMObjStatusText {
+	white-space: nowrap;
+}
+
+.mutedText.sapMText {
+	color: #6a7a8c;
+	font-size: 0.8125rem;
+}
+
+/* Phone: compact popped-in values */
+.productTable .sapMListTblSubCnt {
+	padding-top: 0;
+	padding-bottom: 10px;
+}
+
+/* ---------- Dialog ---------- */
+.addDialog .sapMDialogSection {
+	padding: 4px 6px 8px;
+}
+
+/* ---------- Detail page ---------- */
+.detailHero {
+	padding: 16px 18px;
+	gap: 16px;
+}
+
+.detailHeroText {
+	flex: 1;
+	gap: 4px;
+	min-width: 12rem;
+}
+
+.detailName.sapMTitle {
+	font-size: 1.3125rem;
+	font-weight: 700;
+	color: #1d2d3e;
+}
+
+.detailPriceBox {
+	align-items: flex-end;
+	gap: 2px;
+}
+
+.detailPrice .sapMObjectNumberText {
+	font-size: 1.625rem;
+	font-weight: 700;
+}
+
+.detailGrid.sapMFlexBox {
+	display: grid;
+	grid-template-columns: 3fr 2fr;
+	gap: 12px;
+}
+
+.infoRow {
+	padding: 9px 0;
+	border-bottom: 1px solid #edf1f5;
+	gap: 16px;
+	align-items: center;
+}
+.infoRow:last-child {
+	border-bottom: none;
+}
+.infoRow > .sapMFlexItem:first-child,
+.infoRow > .sapMLabel {
+	min-width: 7rem;
+	width: 7rem;
+}
+.infoRow .sapMLabel {
+	color: #556b82;
+}
+.infoRow > .sapMFlexItem:last-child {
+	flex: 1;
+}
+
+.stockBig.sapMText {
+	font-size: 2.125rem;
+	font-weight: 700;
+	color: #1d2d3e;
+	line-height: 1.1;
+}
+
+/* Stock progress bar (!important beats the ProgressIndicator's built-in sizes) */
+.stockBar.sapMPI {
+	height: 10px !important;
+	min-height: 0 !important;
+	margin: 10px 0 4px;
+	padding: 0;
+	border: none !important;
+	border-radius: 5px;
+	box-shadow: none !important;
+	background: #e9edf2 !important;
+	overflow: hidden;
+}
+.stockBar.sapMPI .sapMPIBar,
+.stockBar.sapMPI .sapMPIBarRemaining {
+	height: 100% !important;
+	min-height: 0 !important;
+	border: none !important;
+	box-shadow: none !important;
+	border-radius: 0;
+}
+.stockBar.sapMPI .sapMPIBarRemaining {
+	background: transparent !important;
+}
+.stockBar.sapMPI::before, .stockBar.sapMPI::after,
+.stockBar.sapMPI *::before, .stockBar.sapMPI *::after {
+	display: none !important;
+}
+
+.orderRow {
+	gap: 10px;
+	margin-top: 10px;
+	padding-top: 12px;
+	border-top: 1px solid #edf1f5;
+}
+
+/* ---------- Phone and small tablet ---------- */
+@media (max-width: 760px) {
+	.statSheet.sapMFlexBox {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+	.stat:nth-child(odd) {
+		border-left: none;
+	}
+	.stat:nth-child(n + 3) {
+		border-top: 1px solid #edf1f5;
+	}
+	.stat {
+		padding: 10px 12px;
+		gap: 8px;
+	}
+	.ring, .miniBars {
+		display: none;
+	}
+	.detailGrid.sapMFlexBox {
+		grid-template-columns: 1fr;
+	}
+	.heroTitle.sapMTitle {
+		font-size: 1.25rem;
+	}
+	.heroSubtitle.sapMText {
+		display: none;
+	}
+	.tableSheet .sapMTB.sapMTBHeader-CTX {
+		padding: 0 8px;
+	}
+}
+
+/* ---------- Price and stock cells ---------- */
+/* Plain text price: full height, no clipping, one line */
+.priceText.sapMText {
+	font-size: 0.9375rem;
+	font-weight: 700;
+	color: #1d2d3e;
+	line-height: 1.5;
+	white-space: nowrap;
+	font-variant-numeric: tabular-nums;
+}
+
+.detailPriceText.sapMText {
+	font-size: 1.625rem;
+	font-weight: 700;
+	color: #1d2d3e;
+	line-height: 1.3;
+	white-space: nowrap;
+	font-variant-numeric: tabular-nums;
+}
+
+/* Stock meter: "● In stock   15" with a thin shelf bar under it */
+.stockMeter {
+	--s: #188918;
+	width: 100%;
+	max-width: 9rem;
+}
+.stockMeter.low { --s: #e76500; }
+.stockMeter.out { --s: #d32030; }
+
+.stockTop {
+	display: flex;
+	align-items: baseline;
+	justify-content: space-between;
+	gap: 8px;
+	line-height: 1.4;
+}
+.stockLabel {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	font-size: 0.8125rem;
+	font-weight: 600;
+	color: var(--s);
+	white-space: nowrap;
+}
+.stockLabel i {
+	width: 7px;
+	height: 7px;
+	border-radius: 50%;
+	background: var(--s);
+	box-shadow: 0 0 0 3px color-mix(in srgb, var(--s) 18%, transparent);
+}
+.stockTop b {
+	font-size: 0.875rem;
+	font-weight: 700;
+	color: #1d2d3e;
+	font-variant-numeric: tabular-nums;
+}
+.stockTrack {
+	height: 4px;
+	margin-top: 5px;
+	border-radius: 2px;
+	background: #e9edf2;
+	overflow: hidden;
+}
+.stockTrack span {
+	display: block;
+	height: 100%;
+	border-radius: 2px;
+	background: var(--s);
+}
+
+@media (max-width: 760px) {
+	/* Price drops under the name on a phone, so line it up on the left */
+	.detailPriceBox {
+		align-items: flex-start;
+	}
+}

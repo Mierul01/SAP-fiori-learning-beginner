@@ -1,0 +1,126 @@
+<mvc:View
+	controllerName="fiori.beginner.products.controller.ProductDetail"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns:core="sap.ui.core"
+	xmlns="sap.m">
+	<Page showHeader="false" class="fioriPage">
+		<content>
+			<!-- 1. Hero header: back button, title and the page actions -->
+			<VBox class="hero">
+				<HBox class="heroInner" justifyContent="SpaceBetween" alignItems="Center" wrap="Wrap">
+					<HBox class="heroLeft" alignItems="Center">
+						<Button
+							icon="sap-icon://nav-back"
+							tooltip="{i18n>back}"
+							press=".onNavBack"
+							class="heroBtn"/>
+						<VBox>
+							<Text text="{i18n>appTitle}" class="heroEyebrow"/>
+							<Title text="{= ${view>/edit} ? ${i18n>editTitle} : ${i18n>detailTitle} }" level="H1" class="heroTitle"/>
+						</VBox>
+					</HBox>
+
+					<!-- Display mode shows Edit / Delete, edit mode shows Save / Cancel -->
+					<HBox class="heroActions">
+						<Button text="{i18n>btnEdit}" icon="sap-icon://edit" press=".onEdit"
+							visible="{= !${view>/edit} }" class="heroBtnPrimary"/>
+						<Button text="{i18n>btnDelete}" icon="sap-icon://delete" press=".onDelete"
+							visible="{= !${view>/edit} }" class="heroBtn"/>
+						<Button text="{i18n>btnSave}" icon="sap-icon://save" press=".onSave"
+							visible="{view>/edit}" class="heroBtnPrimary"/>
+						<Button text="{i18n>btnCancel}" press=".onCancel"
+							visible="{view>/edit}" class="heroBtn"/>
+					</HBox>
+				</HBox>
+			</VBox>
+
+			<VBox class="pageBody">
+				<!-- 2. Product summary: avatar, name, status and price -->
+				<HBox class="sheet detailHero" alignItems="Center" wrap="Wrap">
+					<Avatar
+						src="{ path: 'Category', formatter: '.formatter.categoryIcon' }"
+						backgroundColor="{ path: 'Category', formatter: '.formatter.categoryColor' }"
+						displaySize="M"
+						displayShape="Square"
+						class="productAvatar"/>
+					<VBox class="detailHeroText">
+						<Title text="{Name}" level="H2" class="detailName" wrapping="true" visible="{= !${view>/edit} }"/>
+						<Input id="nameInput" value="{Name}" visible="{view>/edit}"
+							valueStateText="{i18n>nameRequired}" liveChange=".onNameChange"/>
+						<Text text="{ProductID} · {Category}" class="mutedText"/>
+						<core:HTML content="{ path: 'Stock', formatter: '.formatter.stockTag' }"/>
+					</VBox>
+					<VBox class="detailPriceBox">
+						<Text text="{i18n>lblUnitPrice}" class="mutedText" visible="{= !${view>/edit} }"/>
+						<Text text="{ path: 'Price', formatter: '.formatter.price' }" wrapping="false"
+							visible="{= !${view>/edit} }" class="detailPriceText"/>
+						<Label text="{i18n>lblPriceRm}" visible="{view>/edit}"/>
+						<StepInput value="{Price}" min="0" max="99999" step="10" width="10rem" visible="{view>/edit}"/>
+					</VBox>
+				</HBox>
+
+				<HBox class="detailGrid">
+					<!-- 3. General information as label / value lines -->
+					<VBox class="sheet sheetBody">
+						<Title text="{i18n>sectionGeneral}" level="H3" class="sheetTitle"/>
+						<HBox class="infoRow">
+							<Label text="{i18n>lblCategory}"/>
+							<HBox>
+								<Text text="{Category}" visible="{= !${view>/edit} }"/>
+								<Select selectedKey="{Category}" visible="{view>/edit}" width="12rem">
+									<core:Item key="Laptops" text="Laptops"/>
+									<core:Item key="Monitors" text="Monitors"/>
+									<core:Item key="Accessories" text="Accessories"/>
+									<core:Item key="Printers" text="Printers"/>
+								</Select>
+							</HBox>
+						</HBox>
+						<HBox class="infoRow">
+							<Label text="{i18n>lblSupplier}"/>
+							<HBox>
+								<Text text="{Supplier}" visible="{= !${view>/edit} }"/>
+								<Input value="{Supplier}" visible="{view>/edit}" width="16rem"/>
+							</HBox>
+						</HBox>
+						<HBox class="infoRow">
+							<Label text="{i18n>lblDescription}"/>
+							<VBox width="100%">
+								<Text text="{Description}" visible="{= !${view>/edit} }"/>
+								<TextArea value="{Description}" visible="{view>/edit}" rows="3" width="100%"/>
+							</VBox>
+						</HBox>
+					</VBox>
+
+					<!-- 4. Stock: big number, bar and the order action -->
+					<VBox class="sheet sheetBody">
+						<Title text="{i18n>sectionStock}" level="H3" class="sheetTitle"/>
+						<HBox alignItems="End">
+							<Text text="{Stock}" class="stockBig"/>
+							<Text text="{i18n>lblShelf}" class="mutedText sapUiTinyMarginBegin"/>
+						</HBox>
+						<ProgressIndicator
+							percentValue="{ path: 'Stock', formatter: '.formatter.stockPercent' }"
+							state="{ path: 'Stock', formatter: '.formatter.stockState' }"
+							showValue="false"
+							displayOnly="true"
+							class="stockBar"/>
+
+						<!-- StepInput: a number field with - and + buttons -->
+						<HBox class="orderRow" alignItems="End" wrap="Wrap">
+							<VBox>
+								<Label text="{i18n>lblOrderQty}" labelFor="qtyInput"/>
+								<StepInput id="qtyInput" value="{view>/orderQty}" min="1" max="100" width="9rem"/>
+							</VBox>
+							<Button
+								text="{i18n>btnOrder}"
+								type="Emphasized"
+								icon="sap-icon://cart"
+								enabled="{= !${view>/edit} }"
+								press=".onOrder"/>
+						</HBox>
+					</VBox>
+				</HBox>
+			</VBox>
+		</content>
+	</Page>
+</mvc:View>

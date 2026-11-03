@@ -1,0 +1,24 @@
+{
+	"Products": [
+		{ "ProductID": "HT-1000", "Name": "Notebook Basic 15", "Category": "Laptops", "Supplier": "Very Best Screens", "Price": 4780, "Currency": "MYR", "Stock": 25, "Description": "Notebook Basic 15 with 2.80 GHz quad core, 15\" LCD, 8 GB DDR3 RAM, 500 GB hard disc." },
+		{ "ProductID": "HT-1001", "Name": "Notebook Basic 17", "Category": "Laptops", "Supplier": "Very Best Screens", "Price": 6245, "Currency": "MYR", "Stock": 8, "Description": "Notebook Basic 17 with 2.80 GHz quad core, 17\" LCD, 8 GB DDR3 RAM, 500 GB hard disc." },
+		{ "ProductID": "HT-1002", "Name": "Notebook Basic 18", "Category": "Laptops", "Supplier": "Very Best Screens", "Price": 7850, "Currency": "MYR", "Stock": 0, "Description": "Notebook Basic 18 with 2.80 GHz quad core, 18\" LCD, 8 GB DDR3 RAM, 1000 GB hard disc." },
+		{ "ProductID": "HT-1003", "Name": "Notebook Professional 15", "Category": "Laptops", "Supplier": "Technocom", "Price": 9995, "Currency": "MYR", "Stock": 14, "Description": "Professional notebook with 3.4 GHz octa core, 15\" Full HD, 16 GB RAM, 1 TB SSD." },
+		{ "ProductID": "HT-1004", "Name": "Notebook Professional 17", "Category": "Laptops", "Supplier": "Technocom", "Price": 11495, "Currency": "MYR", "Stock": 5, "Description": "Professional notebook with 3.4 GHz octa core, 17\" Full HD, 32 GB RAM, 1 TB SSD." },
+		{ "ProductID": "HT-1005", "Name": "Ultrabook Air 13", "Category": "Laptops", "Supplier": "Fasttech", "Price": 6995, "Currency": "MYR", "Stock": 31, "Description": "Thin and light ultrabook, 13\" display, 16 GB RAM, 512 GB SSD, 14 hour battery." },
+		{ "ProductID": "HT-2000", "Name": "Flat Basic 22", "Category": "Monitors", "Supplier": "Very Best Screens", "Price": 1195, "Currency": "MYR", "Stock": 42, "Description": "22\" LCD monitor, Full HD, 5 ms response time." },
+		{ "ProductID": "HT-2001", "Name": "Flat Future 27", "Category": "Monitors", "Supplier": "Very Best Screens", "Price": 2145, "Currency": "MYR", "Stock": 3, "Description": "27\" 4K monitor with USB-C and height adjustable stand." },
+		{ "ProductID": "HT-2002", "Name": "Flat XL 32", "Category": "Monitors", "Supplier": "Technocom", "Price": 3445, "Currency": "MYR", "Stock": 12, "Description": "32\" curved 4K monitor for office and design work." },
+		{ "ProductID": "HT-2003", "Name": "Flat Mini 19", "Category": "Monitors", "Supplier": "Fasttech", "Price": 745, "Currency": "MYR", "Stock": 0, "Description": "Compact 19\" monitor, ideal for a second screen." },
+		{ "ProductID": "HT-3000", "Name": "Ergo Mouse", "Category": "Accessories", "Supplier": "Fasttech", "Price": 145, "Currency": "MYR", "Stock": 120, "Description": "Ergonomic wireless mouse with 6 buttons." },
+		{ "ProductID": "HT-3001", "Name": "Comfort Keyboard", "Category": "Accessories", "Supplier": "Fasttech", "Price": 295, "Currency": "MYR", "Stock": 64, "Description": "Quiet keyboard with wrist rest and number pad." },
+		{ "ProductID": "HT-3002", "Name": "USB-C Dock", "Category": "Accessories", "Supplier": "Technocom", "Price": 945, "Currency": "MYR", "Stock": 7, "Description": "Docking station with 2 HDMI, 4 USB, LAN and 100 W charging." },
+		{ "ProductID": "HT-3003", "Name": "Laptop Bag Pro", "Category": "Accessories", "Supplier": "Bags & More", "Price": 395, "Currency": "MYR", "Stock": 18, "Description": "Water resistant bag for laptops up to 17\"." },
+		{ "ProductID": "HT-3004", "Name": "HD Webcam", "Category": "Accessories", "Supplier": "Fasttech", "Price": 345, "Currency": "MYR", "Stock": 2, "Description": "1080p webcam with built-in microphone." },
+		{ "ProductID": "HT-3005", "Name": "Noise Cancel Headset", "Category": "Accessories", "Supplier": "Sound Inc", "Price": 745, "Currency": "MYR", "Stock": 22, "Description": "Over-ear headset with active noise cancelling, for calls and music." },
+		{ "ProductID": "HT-4000", "Name": "Laser Printer Pro", "Category": "Printers", "Supplier": "Printy Co", "Price": 1995, "Currency": "MYR", "Stock": 9, "Description": "Black and white laser printer, 40 pages per minute, duplex." },
+		{ "ProductID": "HT-4001", "Name": "Color Jet 200", "Category": "Printers", "Supplier": "Printy Co", "Price": 1245, "Currency": "MYR", "Stock": 15, "Description": "Colour inkjet printer with Wi-Fi and scanner." },
+		{ "ProductID": "HT-4002", "Name": "Photo Printer Mini", "Category": "Printers", "Supplier": "Printy Co", "Price": 645, "Currency": "MYR", "Stock": 0, "Description": "Pocket photo printer for 10 x 15 cm prints." },
+		{ "ProductID": "HT-4003", "Name": "Office All-in-One", "Category": "Printers", "Supplier": "Technocom", "Price": 2745, "Currency": "MYR", "Stock": 4, "Description": "Print, copy, scan and fax with 50 sheet document feeder." }
+	]
+}
