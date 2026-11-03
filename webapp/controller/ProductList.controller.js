@@ -4,8 +4,9 @@ sap.ui.define([
 	"sap/ui/model/FilterOperator",
 	"sap/ui/model/Sorter",
 	"sap/m/MessageToast",
-	"../model/formatter"
-], function (Controller, Filter, FilterOperator, Sorter, MessageToast, formatter) {
+	"../model/formatter",
+	"../model/ai"
+], function (Controller, Filter, FilterOperator, Sorter, MessageToast, formatter, ai) {
 	"use strict";
 
 	// Which stat cell filters which stock level
@@ -315,6 +316,50 @@ sap.ui.define([
 
 		onCancelAdd: function () {
 			this.byId("addDialog").close();
+		},
+
+		// ---------- AI (Claude) ----------
+
+		onAskAi: function () {
+			this.getOwnerComponent().getAiAssistant().open();
+		},
+
+		// "Write with AI": Claude writes a one-line description, streamed into the TextArea
+		onAiDescription: function () {
+			var oViewModel = this.getOwnerComponent().getModel("view");
+			var oNew = oViewModel.getProperty("/newProduct");
+
+			if (!oNew.Name.trim()) {
+				oViewModel.setProperty("/newProduct/nameState", "Error");
+				return;
+			}
+			if (!ai.hasKey()) {
+				// No key yet: the assistant shows the key setup
+				MessageToast.show(this._getText("aiNeedKey"));
+				this.getOwnerComponent().getAiAssistant().open();
+				return;
+			}
+
+			oViewModel.setProperty("/ai/writing", true);
+			ai.stream({
+				system: "You write short product descriptions for an electronics shop catalog in Malaysia. " +
+					"Reply with the description only: one sentence, at most 25 words, plain text, no quotes, no price.",
+				messages: [{
+					role: "user",
+					content: "Product: " + oNew.Name.trim() + "\nCategory: " + oNew.Category +
+						(oNew.Supplier.trim() ? "\nSupplier: " + oNew.Supplier.trim() : "") +
+						"\nPrice: RM " + oNew.Price
+				}]
+			}, function (sSoFar) {
+				oViewModel.setProperty("/newProduct/Description", sSoFar);
+			}).catch(function (oError) {
+				MessageToast.show(this._getText(oError.kind === "auth" ? "aiErrorAuth" : "aiErrorOther"));
+				if (oError.kind === "auth") {
+					ai.clearKey();
+				}
+			}.bind(this)).finally(function () {
+				oViewModel.setProperty("/ai/writing", false);
+			});
 		},
 
 		// ---------- Navigation ----------

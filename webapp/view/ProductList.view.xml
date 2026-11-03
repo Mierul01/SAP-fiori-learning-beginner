@@ -187,6 +187,9 @@
 					</HBox>
 				</VBox>
 			</VBox>
+
+			<!-- Floating AI button: opens the AI Assistant (controller/AiAssistant.js) -->
+			<Button text="{i18n>aiAsk}" icon="sap-icon://ai" press=".onAskAi" class="aiFab"/>
 		</content>
 	</Page>
 </mvc:View>

@@ -831,3 +831,221 @@ body.isScrolled::before {
 .addDialog .formRow .qtyInput.sapMStepInput {
 	width: 100% !important;
 }
+
+/* ---------- AI (Claude) ---------- */
+/* Floating "Ask AI" button (bottom right, small so it does not cover the list) */
+.aiFab.sapMBtn {
+	position: fixed;
+	right: 16px;
+	bottom: calc(18px + env(safe-area-inset-bottom));
+	/* Low layer, so open dialogs cover it */
+	z-index: 5;
+	height: auto;
+}
+.aiFab .sapMBtnInner {
+	height: 2.75rem;
+	padding: 0 18px 0 14px;
+	border-radius: 999px;
+	border: none;
+	background: linear-gradient(120deg, #6a3df0 0%, #0070f2 100%);
+	box-shadow: 0 8px 22px rgba(74, 52, 210, 0.35);
+}
+.aiFab .sapMBtnInner .sapMBtnIcon,
+.aiFab .sapMBtnInner .sapMBtnContent {
+	color: #fff;
+	font-weight: 700;
+}
+.aiFab:hover .sapMBtnInner {
+	filter: brightness(1.08);
+}
+/* Leave room so the last row and the pager are not hidden behind the button */
+.fioriPage .pageBody {
+	padding-bottom: calc(72px + env(safe-area-inset-bottom));
+}
+
+/* "Ask AI about this product" on the detail page */
+.aiInlineBtn.sapMBtn {
+	margin-top: 12px;
+}
+.aiInlineBtn .sapMBtnInner {
+	border: 1px solid #d9cffd;
+	background: linear-gradient(120deg, #f4f0ff 0%, #eef5ff 100%);
+}
+.aiInlineBtn .sapMBtnInner .sapMBtnIcon,
+.aiInlineBtn .sapMBtnInner .sapMBtnContent {
+	color: #5a32d6;
+	font-weight: 700;
+}
+
+/* "Write with AI" in the Add product form */
+.aiWriteBtn .sapMBtnInner .sapMBtnIcon,
+.aiWriteBtn .sapMBtnInner .sapMBtnContent {
+	color: #5a32d6;
+	font-weight: 600;
+}
+
+/* Dialog header */
+/* !important: the theme gives dialog header bars a white background */
+.aiDialog .aiHeader.sapMBar {
+	background: linear-gradient(120deg, #6a3df0 0%, #0064d9 70%, #0a4aa8 100%) !important;
+	height: 3.5rem;
+	box-shadow: none !important;
+	border: none !important;
+}
+.aiHeader .sapMBarLeft {
+	gap: 10px;
+	padding-left: 6px;
+}
+.aiHeaderIcon.sapUiIcon {
+	color: #fff;
+	font-size: 1.25rem;
+	width: 34px;
+	height: 34px;
+	line-height: 34px;
+	border-radius: 10px;
+	background: rgba(255, 255, 255, 0.18);
+}
+.aiHeaderTitle.sapMTitle {
+	color: #fff;
+	font-size: 1rem;
+	font-weight: 700;
+}
+.aiHeaderSub.sapMText {
+	color: rgba(255, 255, 255, 0.8);
+	font-size: 0.6875rem;
+}
+.aiHeaderBtn .sapMBtnInner .sapMBtnIcon {
+	color: #fff;
+}
+
+/* Key setup */
+.aiSetup {
+	padding: 22px 18px 18px;
+	gap: 10px;
+	align-items: center;
+	text-align: center;
+}
+.aiSetup > .sapMFlexItem {
+	width: 100%;
+}
+.aiSetupIcon.sapUiIcon {
+	font-size: 1.75rem;
+	width: 56px;
+	height: 56px;
+	line-height: 56px;
+	border-radius: 16px;
+	color: #fff;
+	background: linear-gradient(120deg, #6a3df0 0%, #0070f2 100%);
+}
+.aiSetupTitle.sapMTitle {
+	font-size: 1.0625rem;
+	font-weight: 700;
+	color: #1d2d3e;
+}
+.aiKeyNote.sapMText {
+	font-size: 0.75rem;
+	color: #7a8a9c;
+}
+
+/* Chat */
+.aiChat {
+	padding: 14px 16px 16px;
+	gap: 10px;
+}
+.aiWelcome {
+	gap: 10px;
+}
+.aiWelcomeText.sapMText {
+	color: #556b82;
+}
+.aiChips {
+	gap: 8px;
+}
+.aiChip .sapMBtnInner {
+	border-radius: 999px;
+	border: 1px solid #d9cffd;
+	background: #f7f4ff;
+}
+.aiChip .sapMBtnInner .sapMBtnIcon,
+.aiChip .sapMBtnInner .sapMBtnContent {
+	color: #5a32d6;
+}
+.aiMessages {
+	gap: 10px;
+}
+.aiRow {
+	width: 100%;
+}
+.aiRow[data-role="user"] {
+	justify-content: flex-end;
+}
+.aiBubble {
+	max-width: 85%;
+	padding: 10px 14px;
+	border-radius: 16px;
+	font-size: 0.875rem;
+	line-height: 1.45;
+	word-wrap: break-word;
+}
+.aiBubble p {
+	margin: 0 0 6px;
+}
+.aiBubble p:last-child {
+	margin-bottom: 0;
+}
+.aiBubble ul {
+	margin: 4px 0;
+	padding-left: 18px;
+}
+.aiBubble li {
+	margin: 2px 0;
+}
+.aiRow[data-role="user"] .aiBubble {
+	background: linear-gradient(120deg, #0070f2 0%, #0a4aa8 100%);
+	color: #fff;
+	border-bottom-right-radius: 4px;
+}
+.aiRow[data-role="assistant"] .aiBubble {
+	background: #f4f6fa;
+	color: #1d2d3e;
+	border: 1px solid #e6eaf0;
+	border-bottom-left-radius: 4px;
+}
+.aiTyping {
+	color: #7a8a9c;
+	font-style: italic;
+}
+.aiError {
+	color: #d32030;
+}
+.aiFooter.sapMTB {
+	padding: 0 12px;
+	height: 3.5rem;
+	gap: 8px;
+}
+
+/* Header: two text lines (title + "Powered by Claude") need normal line height */
+.aiHeader .sapMBarLeft,
+.aiHeader .sapMBarRight {
+	line-height: normal;
+	height: 100%;
+	align-items: center;
+}
+.aiHeaderText {
+	line-height: 1.25;
+}
+
+/* Full-screen on iPhone: keep the header below the status bar and the box above the home bar */
+.aiDialog.sapMDialogStretched .aiHeader.sapMBar {
+	padding-top: env(safe-area-inset-top);
+	height: calc(3.5rem + env(safe-area-inset-top));
+	box-sizing: border-box;
+}
+.aiDialog.sapMDialogStretched .sapMDialogFooter {
+	padding-bottom: env(safe-area-inset-bottom);
+	background: #fff;
+}
+.aiDialog .aiHeaderTitle.sapMTitle,
+.aiDialog .aiHeaderTitle .sapMTitle {
+	color: #fff !important;
+}

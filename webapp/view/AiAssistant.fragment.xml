@@ -1,0 +1,98 @@
+<!--
+	AI Assistant dialog. Opened by controller/AiAssistant.js from the list page
+	("Ask AI" button) and from the product page ("Ask AI about this product").
+-->
+<core:FragmentDefinition
+	xmlns="sap.m"
+	xmlns:core="sap.ui.core">
+	<Dialog
+		id="aiDialog"
+		title="{i18n>aiTitle}"
+		icon="sap-icon://ai"
+		contentWidth="34rem"
+		contentHeight="32rem"
+		resizable="false"
+		class="aiDialog">
+		<customHeader>
+			<Bar class="aiHeader">
+				<contentLeft>
+					<core:Icon src="sap-icon://ai" class="aiHeaderIcon"/>
+					<VBox class="aiHeaderText" justifyContent="Center">
+						<Title text="{i18n>aiTitle}" level="H2" class="aiHeaderTitle"/>
+						<Text text="{i18n>aiPoweredBy}" class="aiHeaderSub"/>
+					</VBox>
+				</contentLeft>
+				<contentRight>
+					<Button icon="sap-icon://refresh" type="Transparent" tooltip="{i18n>aiClear}"
+						press=".onClear" visible="{= ${view>/ai/hasKey} &amp;&amp; ${view>/ai/messages}.length > 0 }" class="aiHeaderBtn"/>
+					<Button icon="sap-icon://key" type="Transparent" tooltip="{i18n>aiForgetKey}"
+						press=".onForgetKey" visible="{view>/ai/hasKey}" class="aiHeaderBtn"/>
+					<Button icon="sap-icon://decline" type="Transparent" tooltip="{i18n>btnClose}"
+						press=".onClose" class="aiHeaderBtn"/>
+				</contentRight>
+			</Bar>
+		</customHeader>
+
+		<!-- 1. First time: ask for an Anthropic API key -->
+		<VBox class="aiSetup" visible="{= !${view>/ai/hasKey} }">
+			<core:Icon src="sap-icon://ai" class="aiSetupIcon"/>
+			<Title text="{i18n>aiSetupTitle}" level="H3" wrapping="true" class="aiSetupTitle"/>
+			<Text text="{i18n>aiSetupText}" class="mutedText"/>
+			<Input
+				id="aiKeyInput"
+				type="Password"
+				value="{view>/ai/keyInput}"
+				placeholder="sk-ant-..."
+				submit=".onSaveKey"
+				width="100%"
+				class="sapUiSmallMarginTop"/>
+			<Button text="{i18n>aiSaveKey}" type="Emphasized" icon="sap-icon://accept" press=".onSaveKey" width="100%"/>
+			<Text text="{i18n>aiKeyNote}" class="aiKeyNote"/>
+			<Link text="{i18n>aiGetKey}" href="https://console.anthropic.com/settings/keys" target="_blank"/>
+		</VBox>
+
+		<!-- 2. The chat -->
+		<VBox class="aiChat" visible="{view>/ai/hasKey}">
+			<!-- Empty state: suggestion chips -->
+			<VBox class="aiWelcome" visible="{= ${view>/ai/messages}.length === 0 }">
+				<Text text="{i18n>aiWelcome}" class="aiWelcomeText"/>
+				<HBox class="aiChips" wrap="Wrap">
+					<Button text="{i18n>aiChip1}" icon="sap-icon://cart" press=".onChip" class="aiChip"/>
+					<Button text="{i18n>aiChip2}" icon="sap-icon://business-objects-experience" press=".onChip" class="aiChip"/>
+					<Button text="{i18n>aiChip3}" icon="sap-icon://lead" press=".onChip" class="aiChip"/>
+					<Button text="{i18n>aiChip4}" icon="sap-icon://lightbulb" press=".onChip" class="aiChip"/>
+				</HBox>
+			</VBox>
+
+			<!-- Messages: one bubble per message -->
+			<VBox items="{view>/ai/messages}" class="aiMessages">
+				<!-- data-role="user" or "assistant" on the row picks the bubble style in style.css -->
+				<HBox class="aiRow">
+					<customData>
+						<core:CustomData key="role" value="{view>role}" writeToDom="true"/>
+					</customData>
+					<FormattedText htmlText="{view>html}" class="aiBubble"/>
+				</HBox>
+			</VBox>
+		</VBox>
+
+		<!-- Message box at the bottom -->
+		<footer>
+			<Toolbar visible="{view>/ai/hasKey}" class="aiFooter">
+				<Input
+					id="aiInput"
+					value="{view>/ai/input}"
+					placeholder="{i18n>aiPlaceholder}"
+					submit=".onSend"
+					enabled="{= !${view>/ai/busy} }"
+					width="100%">
+					<layoutData>
+						<ToolbarLayoutData shrinkable="true"/>
+					</layoutData>
+				</Input>
+				<Button icon="sap-icon://paper-plane" type="Emphasized" tooltip="{i18n>aiSend}"
+					press=".onSend" enabled="{= !${view>/ai/busy} }"/>
+			</Toolbar>
+		</footer>
+	</Dialog>
+</core:FragmentDefinition>

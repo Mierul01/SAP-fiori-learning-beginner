@@ -115,6 +115,16 @@ sap.ui.define([
 			MessageToast.show(this._getText("orderDone", [iQty, oContext.getProperty("Name"), iNewStock]));
 		},
 
+		// ---------- AI (Claude) ----------
+
+		// Opens the AI Assistant and asks about this product straight away
+		onAskAi: function () {
+			var oProduct = this.getView().getBindingContext().getObject();
+			this.getOwnerComponent().getAiAssistant().open(
+				this._getText("aiProductQuestion", [oProduct.Name, oProduct.ProductID])
+			);
+		},
+
 		onNavBack: function () {
 			if (this.getOwnerComponent().getModel("view").getProperty("/edit")) {
 				this.onCancel();

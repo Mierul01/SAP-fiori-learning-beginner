@@ -6,8 +6,9 @@ A small SAP Fiori app built with **SAPUI5** (OpenUI5), the same technology cover
 **What the app does**
 
 - **Stat strip**: inventory value (with a mini bar chart per category) and In stock / Low stock / Out of stock counts (with mini donut charts). Click a stock stat to filter the table, and click it again to clear the filter.
-- **Product table**: search, category filter, sort (name, price, stock), a "Filtered by" bar with a Clear button, and paging (10 rows, then "More")
+- **Product table**: search, category filter, sort (name, price, stock), a "Filtered by" bar with a Clear button, and paging (10 rows per page)
 - **Add product**: a dialog with a form and validation (the name is required)
+- **AI Assistant (Claude)**: an "Ask AI" chat that knows the live inventory (restock advice, summaries, promotion ideas), "Ask AI about this product" on each product page, and "Write with AI" for product descriptions. See [AI features](#ai-features-claude)
 - **Export**: downloads the filtered rows as `products.csv`, which Excel opens
 - **Detail page**: Edit / Save / Cancel (display and edit mode), Delete with a confirmation, and Order more stock
 - Uses the **SAP Horizon** light theme on a white background
@@ -26,6 +27,20 @@ node server.js
 Then open <http://localhost:8080>.
 
 > Opening `index.html` by double-clicking does not work. UI5 loads its views over HTTP, so it needs a web server.
+
+## AI features (Claude)
+
+The app uses **Claude** (`claude-opus-5-5`) through the official Anthropic JavaScript SDK, loaded in the browser.
+
+| Feature | Where | What happens |
+|---|---|---|
+| **AI Assistant** | "Ask AI" button (bottom right) | A chat. Each question is sent with the current product list, so Claude can answer "What should I restock?" or "Which category holds the most value?". Answers stream in word by word. |
+| **Ask AI about this product** | Product page, Stock card | Opens the assistant and asks for a quick review of that product: stock level, how many to reorder and a sales idea. |
+| **Write with AI** | Add product dialog | Claude writes a one-sentence description from the name, category and price. |
+
+**API key:** the site is static (GitHub Pages), so there is no server to keep a key secret. The first time you open the assistant, it asks for your own [Anthropic API key](https://console.anthropic.com/settings/keys). The key is saved only in that browser (`localStorage`) and sent only to Anthropic. The key button in the assistant header removes it. Don't use your key on a shared device.
+
+The code to look at: `webapp/model/ai.js` (SDK, streaming, errors), `webapp/controller/AiAssistant.js` (chat logic and the system prompt) and `webapp/view/AiAssistant.fragment.xml` (the chat UI).
 
 ## Put it on your phone's home screen
 

@@ -1,7 +1,8 @@
 sap.ui.define([
 	"sap/ui/core/UIComponent",
-	"sap/ui/model/json/JSONModel"
-], function (UIComponent, JSONModel) {
+	"sap/ui/model/json/JSONModel",
+	"./controller/AiAssistant"
+], function (UIComponent, JSONModel, AiAssistant) {
 	"use strict";
 
 	// The Component is the "app container". It reads manifest.json,
@@ -23,11 +24,21 @@ sap.ui.define([
 				filterText: "",
 				orderQty: 10,
 				edit: false,
-				newProduct: {}
+				newProduct: {},
+				// AI Assistant chat state
+				ai: { hasKey: false, keyInput: "", input: "", busy: false, messages: [], writing: false }
 			}), "view");
 
 			// Start routing: the URL hash decides which page is shown
 			this.getRouter().initialize();
+		},
+
+		// One shared AI Assistant for the whole app
+		getAiAssistant: function () {
+			if (!this._oAiAssistant) {
+				this._oAiAssistant = new AiAssistant(this);
+			}
+			return this._oAiAssistant;
 		}
 	});
 });

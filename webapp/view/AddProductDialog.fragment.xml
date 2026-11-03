@@ -54,7 +54,12 @@
 			</HBox>
 
 			<VBox class="formField">
-				<Label text="{i18n>lblDescription}" labelFor="newDescription"/>
+				<HBox justifyContent="SpaceBetween" alignItems="Center">
+					<Label text="{i18n>lblDescription}" labelFor="newDescription"/>
+					<!-- Claude writes the description from the name, category and price -->
+					<Button text="{= ${view>/ai/writing} ? ${i18n>aiWriting} : ${i18n>aiWrite} }" icon="sap-icon://ai"
+						type="Transparent" press=".onAiDescription" enabled="{= !${view>/ai/writing} }" class="aiWriteBtn"/>
+				</HBox>
 				<TextArea id="newDescription" value="{view>/newProduct/Description}" rows="3" width="100%"/>
 			</VBox>
 		</VBox>

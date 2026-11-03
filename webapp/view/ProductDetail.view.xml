@@ -118,6 +118,10 @@
 								enabled="{= !${view>/edit} }"
 								press=".onOrder"/>
 						</HBox>
+
+						<!-- Ask Claude whether to restock this product -->
+						<Button text="{i18n>aiAskProduct}" icon="sap-icon://ai" press=".onAskAi"
+							width="100%" class="aiInlineBtn"/>
 					</VBox>
 				</HBox>
 			</VBox>
